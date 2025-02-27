@@ -12,4 +12,17 @@ def index(request):
     )
     response_json = response.json()
 
-    return render(request, "index.html", {"data": response_json})
+    return render(request, "pages/index.html", {"data": response_json})
+
+
+def about(request):
+    return render(request, "pages/about.html")
+
+
+def contact(request):
+    return render(request, "pages/contact.html")
+
+
+def handler_404(request, exception):
+    print("exception", exception)
+    return render(request, "global/pages/404.html", status=404)

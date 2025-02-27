@@ -12,4 +12,5 @@ wheels/
 # Project-generated files
 .env
 db.sqlite3
-/img
+/staticfiles
+/media
