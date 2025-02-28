@@ -129,6 +129,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+EMAIL = "paulobenatto02@gmail.com"
+LINKEDIN = "https://www.linkedin.com/in/paulobenatto/"
+
 import dotenv
 
 dotenv.load_dotenv()
