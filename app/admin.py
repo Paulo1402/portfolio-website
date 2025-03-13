@@ -28,6 +28,8 @@ class ImageInline(admin.TabularInline):
 
 
 class ProjectAdmin(admin.ModelAdmin):
+    # TODO: use pillow to resize project images to the same proportion
+
     list_display = ("title", "github_url", "fetch_github_button")
     inlines = [ImageInline]
 

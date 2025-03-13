@@ -1,5 +1,3 @@
-import re
-
 from django.db.models import Value
 from django.db.models.functions import Coalesce
 from django.shortcuts import render
@@ -77,13 +75,6 @@ def projects(request):
 
 def formation(request):
     formation = Formation.objects.all()
-
-    for formation_ in formation:
-        print(
-            formation_.topics.count(),
-            bool(formation_.topics),
-            len(str(formation_.topics)),
-        )
 
     return render(
         request,

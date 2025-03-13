@@ -29,15 +29,15 @@
                             Exibir certificação
                         </a>
                     {% endif %}
-
-                    {% if certification.topics.count %}
-                        <div class="card-footer pb-0">
-                            {% for topic in certification.topics.all %}
-                                <span class="badge rounded-pill text-bg-success">{{ topic.name }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
+
+                {% if certification.topics.count %}
+                    <div class="card-footer">
+                        {% for topic in certification.topics.all %}
+                            <span class="badge rounded-pill text-bg-success">{{ topic.name }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
         {% endfor %}
     </div>

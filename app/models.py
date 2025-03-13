@@ -68,12 +68,6 @@ class BaseStartDateEndDateModel(models.Model):
     class Meta:
         abstract = True
 
-    def formated_start_date(self):
-        return self.start_date.strftime("%B %Y")
-
-    def formated_end_date(self):
-        return self.end_date.strftime("%B %Y")
-
 
 class Experience(BaseStartDateEndDateModel):
     title = models.CharField(max_length=100)
@@ -106,8 +100,9 @@ class Certification(BaseStartDateEndDateModel):
         return self.title
 
 
-class Project(models.Model):
+class Project(BaseStartDateEndDateModel):
     title = models.CharField(max_length=100)
+    company = models.CharField(max_length=100, default="Projeto Pessoal")
     description = models.TextField()
     github_url = models.URLField(null=True, blank=True)
     topics = tagulous.models.TagField(Topic, blank=True)

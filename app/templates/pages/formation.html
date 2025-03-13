@@ -23,15 +23,15 @@
                             {{ formation_.description | linebreaksbr }}
                         </div>
                     {% endif %}
-
-                    {% if formation_.topics.count %}
-                        <div class="card-footer pb-0">
-                            {% for topic in formation_.topics.all %}
-                                <span class="badge rounded-pill text-bg-success">{{ topic.name }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
+
+                {% if formation_.topics.count %}
+                    <div class="card-footer">
+                        {% for topic in formation_.topics.all %}
+                            <span class="badge rounded-pill text-bg-success">{{ topic.name }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
         {% endfor %}
     </div>

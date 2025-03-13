@@ -34,87 +34,16 @@
                             </ul>
                         </div>
                     {% endif %}
-
-                    {% if experience.topics.count %}
-                        <div class="card-footer pb-0">
-                            {% for topic in experience.topics.all %}
-                                <span class="badge rounded-pill text-bg-success">{{ topic.name }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
+
+                {% if experience.topics.count %}
+                    <div class="card-footer">
+                        {% for topic in experience.topics.all %}
+                            <span class="badge rounded-pill text-bg-success">{{ topic.name }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
-
         {% endfor %}
-
-        {#        <div class="card mt-5">#}
-        {#            <div class="card-body">#}
-        {#                <h5 class="card-title">Desenvolvedor de Software Python | JavaScript</h5>#}
-        {#                <h6 class="card-subtitle mb-2 text-muted">Floui#}
-        {##}
-        {#                </h6>#}
-        {#                Responsável pelo desenvolvimento e manutenção da plataforma Floui, uma aplicação web low code com foco#}
-        {#                em automação e integração entre sistemas.#}
-        {#                <br>#}
-        {#                <br>#}
-        {##}
-        {#                Responsabilidades:#}
-        {##}
-        {#                <ul class="text-decoration-none">#}
-        {#                    <li>• Implementação de fluxos de automações e integrações entre sistemas (Magento/Adobe Commerce,#}
-        {#                        Omie, Sankhya, TOTVS, Wake Commerce, etc);#}
-        {#                    </li>#}
-        {#                    <li>• Suporte N2 da plataforma Floui;</li>#}
-        {#                    <li>• Desenvolvimento de novos conectores para o produto;</li>#}
-        {#                    <li>• Desenvolvimento de testes unitários e de integração;</li>#}
-        {#                    <li>• Desenvolvimento de APIs e otimização do backend com Nodejs;</li>#}
-        {#                    <li>• Desenvolvimento e melhorias no frontend web com Vuejs;</li>#}
-        {#                    <li>• Desenvolvimento de testes end-to-end automatizados com Robot Framework;</li>#}
-        {#                    <li>• Desenvolvimento de aplicações para uso interno usando Python;</li>#}
-        {#                    <li>• Manutenção e melhorias na base de códigos;</li>#}
-        {#                    <li>• Levantamento de requisitos e apresentações com clientes;</li>#}
-        {#                </ul>#}
-        {##}
-        {#                <div class="card-footer">#}
-        {#                    <small class="text-muted">Outubro de 2023 - Novembro de 2024</small>#}
-        {#                </div>#}
-        {#            </div>#}
-        {#        </div>#}
-        {##}
-        {#        <div class="card mt-5">#}
-        {#            <div class="card-body">#}
-        {#                <h5 class="card-title">Desenvolvedor de Software Python | VBA</h5>#}
-        {#                <h6 class="card-subtitle mb-2 text-muted">Madeireira Kamua#}
-        {##}
-        {#                </h6>#}
-        {#                Responsável por automação de tarefas e soluções envolvendo software.#}
-        {#                <br>#}
-        {#                <br>#}
-        {##}
-        {#                Responsabilidades:#}
-        {##}
-        {#                <ul>#}
-        {#                    <li>Desenvolvimento de planilhas inteligentes e automatizadas para o#}
-        {#                        Microsoft Excel usando VBA#}
-        {#                    </li>#}
-        {#                    <li>Desenvolvimento e automação de dashboards interativos no Microsoft Power#}
-        {#                        BI#}
-        {#                    </li>#}
-        {#                    <li>Desenvolvimento e manutenção de programas desktop usando Python e#}
-        {#                        PyQt6/PySide6#}
-        {#                    </li>#}
-        {#                    <li>Automação de tarefas com VBA e Python, usando o framework BotCity e#}
-        {#                        bibliotecas como Selenium e#}
-        {#                        PyAutoGui (automação de disparos de e-mails, emissão de notas fiscais, consumo de APIs para#}
-        {#                        coleta#}
-        {#                        de cotações, etc);#}
-        {#                    </li>#}
-        {#                </ul>#}
-        {##}
-        {#                <div class="card-footer">#}
-        {#                    <small class="text-muted">Junho de 2021 - Outubro de 2023</small>#}
-        {#                </div>#}
-        {#            </div>#}
-        {#        </div>#}
     </div>
 {% endblock %}
