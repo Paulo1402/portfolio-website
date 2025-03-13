@@ -3,10 +3,12 @@
 
 {% block main %}
     <div class="container">
-        <img src="/media/profile/profile.jpeg"
-             class="img-fluid rounded-circle mb-5" alt="Foto de perfil"
-             style="width: 200px; height: 200px; margin: 0 auto; display: block;"
-        />
+        {% if profile.picture %}
+            <img src="{{ profile.picture.url }}"
+                 class="img-fluid rounded-circle mb-5" alt="Foto de perfil"
+                 style="width: 200px; height: 200px; margin: 0 auto; display: block;"
+            />
+        {% endif %}
 
         <blockquote class="blockquote text-center mb-5">
             <p>Beautiful is better than ugly. Explicit is better than implicit. Simple is better than
@@ -16,16 +18,7 @@
         </blockquote>
 
         <p class="text-center">
-            Apaixonado por tecnologia e principalmente pela linguagem Python, estou sempre em busca por aprender cada
-            vez mais, sempre respeitando as boas práticas e buscando escrever um código limpo, escalável e de fácil
-            manutenção.
-        </p>
-
-        <p class="text-center">
-            Sou um estusiasta na programação e já experimentei diversas tecnologias, mas dentre elas acabei me apegando
-            no desenvolvimento web fullstack com ênfase no backend usando Python e Django com frameworks como Django
-            Rest Framework e Django Ninja para construções de APIs. No frontend trabalho com TypeScript usando
-            principalmente React ou Vue para construção da interface.
+            {{ profile.description | linebreaksbr }}
         </p>
     </div>
 
@@ -34,186 +27,24 @@
 
         <div class="container">
             <div class="row g-4 row-cols-1 row-cols-sm-2 row-cols-md-3">
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="card-title m-2">
-                                Soft Skills
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Trabalho em equipe</li>
-                                <li class="list-group-item">Resiliência</li>
-                                <li class="list-group-item">Senso crítico</li>
-                                <li class="list-group-item">Pensamento análitico</li>
-                                <li class="list-group-item">Flexibilidade</li>
-                                <li class="list-group-item">Autonomia</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="card-title m-2">
-                                Linguagens de programação
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Python</li>
-                                <li class="list-group-item">VBA</li>
-                                <li class="list-group-item">JavaScript</li>
-                                <li class="list-group-item">TypeScript</li>
-                                <li class="list-group-item">SQL</li>
-                            </ul>
+                {% for area, skills in skills_by_area.items %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="card-title m-2">
+                                    {{ area.name }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    {% for skill in skills %}
+                                        <li class="list-group-item">{{ skill.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col">
-                    <div class="card ">
-                        <div class="card-header">
-                            <h5 class="card-title m-2">
-                                Backend
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Django</li>
-                                <li class="list-group-item">Django Rest Framework</li>
-                                <li class="list-group-item">FastAPI</li>
-                                <li class="list-group-item">Nodejs</li>
-                                <li class="list-group-item">Fastify</li>
-                                <li class="list-group-item">Nestjs</li>
-                                <li class="list-group-item">Express</li>
-                                <li class="list-group-item">RabbitMQ</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="card-title m-2">
-                                Frontend
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">React</li>
-                                <li class="list-group-item">Vue</li>
-                                <li class="list-group-item">Redux</li>
-                                <li class="list-group-item">Next.js</li>
-                                <li class="list-group-item">TailwindCSS</li>
-                                <li class="list-group-item">Bootstrap</li>
-                                <li class="list-group-item">Vuetify</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="card-title m-2">
-                                ORMs
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Django ORM</li>
-                                <li class="list-group-item">SQL Alchemy</li>
-                                <li class="list-group-item">Peewee</li>
-                                <li class="list-group-item">Prisma</li>
-                                <li class="list-group-item">Drizzle</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="card-title m-2">
-                                Banco de dados
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">PostgreSQL</li>
-                                <li class="list-group-item">MySQL</li>
-                                <li class="list-group-item">Redis</li>
-                                <li class="list-group-item">MongoDB</li>
-                                <li class="list-group-item">DynamoDB</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="card-title m-2">
-                                Ferramentas
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Git</li>
-                                <li class="list-group-item">GitHub</li>
-                                <li class="list-group-item">Docker</li>
-                                <li class="list-group-item">Linux</li>
-                                <li class="list-group-item">Nginx</li>
-                                <li class="list-group-item">Kibana</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="card-title m-2">
-                                Serviços
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Amazon Web Services (AWS)</li>
-                                <li class="list-group-item">Google Cloud Platform (GCP)</li>
-                                <li class="list-group-item">Google Firebase</li>
-                                <li class="list-group-item">Vercel</li>
-                                <li class="list-group-item">Supabase</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="card-title m-2">
-                                Metodologias e conceitos
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Clean code</li>
-                                <li class="list-group-item">SOLID</li>
-                                <li class="list-group-item">API RESTful</li>
-                                <li class="list-group-item">TDD</li>
-                                <li class="list-group-item">Scrum</li>
-                                <li class="list-group-item">Kanban</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>

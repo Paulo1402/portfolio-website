@@ -2,29 +2,43 @@
 
 {% block main %}
     <div class="container">
-        <div class="card mt-5">
-            <div class="card-body">
-                <h5 class="card-title">PCEP - Python Certified Entry-Level Programmer</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Python Institute</h6>
-                <a href="#" target="_blank" class="card-link">Exibir certificação</a>
+        {% for certification in certifications %}
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h5 class="card-title">{{ certification.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        {{ certification.institution }} |
+                        <small class="text-muted">
+                            {{ certification.start_date | date:"F Y" }} -
+                            {% if certification.end_date %}
+                                {{ certification.end_date | date:"F Y" }}
+                            {% else %}
+                                Atual
+                            {% endif %}
+                        </small>
+                    </h6>
 
-                <div class="card-footer mt-2">
-                    <small class="text-muted">Outubro de 2023</small>
+                    {% if certification.description %}
+                        <div class="certification-description">
+                            {{ certification.description | linebreaksbr }}
+                        </div>
+                    {% endif %}
+
+                    {% if certification.url %}
+                        <a href="{{ certification.url }}" target="_blank" class="card-link btn btn-primary">
+                            Exibir certificação
+                        </a>
+                    {% endif %}
+
+                    {% if certification.topics.count %}
+                        <div class="card-footer pb-0">
+                            {% for topic in certification.topics.all %}
+                                <span class="badge rounded-pill text-bg-success">{{ topic.name }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
-        </div>
-
-        <div class="card mt-5">
-            <div class="card-body">
-                <h5 class="card-title">AWS Certified Cloud Practitioner</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Amazon Web Services (AWS)</h6>
-                <a href="#" target="_blank" class="card-link">Exibir certificação</a>
-
-                <div class="card-footer mt-2">
-                    <small class="text-muted">Fevereiro de 2025 - Fevereiro de 2028</small>
-                </div>
-            </div>
-        </div>
-
+        {% endfor %}
     </div>
 {% endblock %}

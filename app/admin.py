@@ -1,10 +1,13 @@
+from datetime import datetime
+
 import requests
+import tagulous.admin
 from django.contrib import admin, messages
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.html import format_html
 from django.urls import path
 from django.conf import settings
-import tagulous.admin
+from django import forms
 
 from app.models import (
     Project,
@@ -88,11 +91,42 @@ class FormationAdmin(admin.ModelAdmin):
 tagulous.admin.register(Formation, FormationAdmin)
 
 
+class MonthYearField(forms.DateField):
+    """Custom DateField that accepts 'YYYY-MM' and converts it to 'YYYY-MM-01'."""
+
+    def to_python(self, value):
+        if not value:
+            return None
+
+        try:
+            return datetime.strptime(value, "%Y-%m").date().replace(day=1)
+        except ValueError:
+            raise forms.ValidationError("Invalid date format. Please use YYYY-MM.")
+
+
+class MonthYearWidget(forms.DateInput):
+    input_type = "month"
+
+
+class ClassificationAdminForm(forms.ModelForm):
+    start_date = MonthYearField(widget=MonthYearWidget(format="%Y-%m"), required=False)
+    end_date = MonthYearField(widget=MonthYearWidget(format="%Y-%m"), required=False)
+
+    class Meta:
+        model = Certification
+        fields = "__all__"
+
+
 class CertificationAdmin(admin.ModelAdmin):
-    pass
+    form = ClassificationAdminForm
+    fieldsets = (
+        ("Certification Information", {"fields": ("title", "institution")}),
+        ("Duration", {"fields": ("start_date", "end_date")}),
+        ("Details", {"fields": ("description", "url", "topics")}),
+    )
 
 
-tagulous.admin.register(Certification, CertificationAdmin)
+admin.site.register(Certification, CertificationAdmin)
 
 
 class ExperienceAdmin(admin.ModelAdmin):

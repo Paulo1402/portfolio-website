@@ -47,8 +47,8 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">GitHub</h5>
-                        <p class="card-text">{{ linkedin.username }}</p>
-                        <a href="{{ linkedin.url }}"
+                        <p class="card-text">{{ github.username }}</p>
+                        <a href="{{ github.url }}"
                            class="btn btn-primary"
                            target="_blank">Acessar GitHub <i class="bi bi-github"></i></a>
                     </div>
@@ -60,20 +60,22 @@
             Formulário de contato
         </h3>
 
-        <form>
+        <form action="{% url 'contact' %}" method="POST">
+            {% csrf_token %}
+
             <div class="mb-3">
                 <label for="name" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Seu nome"/>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Seu nome" required/>
             </div>
 
             <div class="mb-3">
                 <label for="email" class="form-label">E-mail</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Seu e-mail"/>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Seu e-mail" required/>
             </div>
             <div class="mb-3">
                 <label for="message" class="form-label">Mensagem</label>
                 <textarea class="form-control" id="message" name="message" rows="3"
-                          placeholder="Escreva sua mensagem"></textarea>
+                          placeholder="Escreva sua mensagem" required></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary">Enviar</button>
