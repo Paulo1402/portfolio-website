@@ -44,10 +44,9 @@
                                     <div class="carousel-item{% if forloop.first %} active{% endif %}">
                                         <img src="{{ project_image.image.url }}"
                                              class="d-block w-100"
-                                             alt="...">
+                                             alt="{{ project.title }}{{ forloop.counter }}">
                                     </div>
                                 {% endfor %}
-
                             </div>
                             <button class="carousel-control-prev" type="button"
                                     data-bs-target="#carousel-{{ project.id }}"

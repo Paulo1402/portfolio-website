@@ -1,0 +1,33 @@
+{% load static %}
+
+<footer class="bg-primary-subtle py-5" data-bs-theme="dark">
+    <div class="container text-white">
+        <p class="text-center">2025 - Desenvolvido por Paulo Benatto</p>
+
+        <p class="text-center mt-3">Aplicação desenvolvida usando
+            <span class="text-muted">
+                <img src="{% static '/global/icon/django-logo.svg' %}" alt="Django logo"
+                     data-bs-toggle="tooltip" data-bs-title="Django"
+                     style="width: 50px;"
+                />
+            </span>
+            e
+            <span class="text-muted">
+                <img src="{% static '/global/icon/bootstrap-logo.svg' %}" alt="Bootstrap logo"
+                     data-bs-toggle="tooltip" data-bs-title="Bootstrap"
+                     style="width: 25px;"
+                />
+            </span>
+        </p>
+
+        <div class="text-center justify-content-center d-flex flex-row gap-2 flex-wrap">
+            <a href="https://www.linkedin.com/in/paulobenatto/"
+               target="_blank" class="text-decoration-none">
+                Linkedin <i class="bi bi-linkedin"></i>
+            </a>
+            <a href="https://github.com/Paulo1402" target="_blank" class="text-decoration-none">
+                Github <i class="bi bi-github"></i>
+            </a>
+        </div>
+    </div>
+</footer>
