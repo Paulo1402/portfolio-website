@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("app", "0002_skill_topic_remove_project_technologies_and_more"),
     ]
@@ -54,7 +53,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="image",
             name="image",
-            field=models.ImageField(upload_to=app.models.project_directory_path),
+            field=models.ImageField(
+                upload_to=app.models.project.project_directory_path
+            ),
         ),
         migrations.AlterField(
             model_name="skill",
