@@ -1,0 +1,32 @@
+services:
+  django:
+    build: .
+    container_name: django_portfolio_app
+    expose:
+      - "8000"
+    volumes:
+      - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
+    depends_on:
+      - db
+    networks:
+      - django-db
+  db:
+    image: postgres:17-alpine
+    container_name: postgres_portfolio_app
+    env_file:
+      - .env
+    networks:
+      - django-db
+    volumes:
+      - postgres_data_portfolio_app:/var/lib/postgresql/data
+
+networks:
+  django-db:
+    driver: bridge
+
+  proxy_network:
+    external: true
+
+volumes:
+  postgres_data_portfolio_app:
