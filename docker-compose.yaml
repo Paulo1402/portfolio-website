@@ -11,6 +11,7 @@ services:
       - db
     networks:
       - django_db
+      - proxy_network
   db:
     image: postgres:17-alpine
     container_name: postgres_portfolio_app
