@@ -5,28 +5,34 @@ services:
     expose:
       - "8000"
     volumes:
-      - ./staticfiles:/app/staticfiles
-      - ./media:/app/media
+      - portfolio_app_static_data:/app/staticfiles
+      - portfolio_app_media_data:/app/media
     depends_on:
       - db
     networks:
-      - django-db
+      - django_db
   db:
     image: postgres:17-alpine
     container_name: postgres_portfolio_app
     env_file:
       - .env
     networks:
-      - django-db
+      - django_db
     volumes:
-      - postgres_data_portfolio_app:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
 
 networks:
-  django-db:
+  django_db:
     driver: bridge
 
   proxy_network:
     external: true
 
 volumes:
-  postgres_data_portfolio_app:
+  postgres_data:
+
+  portfolio_app_static_data:
+    external: true
+
+  portfolio_app_media_data:
+    external: true
