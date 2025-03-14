@@ -104,6 +104,7 @@ def contact(request):
         email = request.POST.get("email", "").strip()
         message = request.POST.get("message", "").strip()
 
+        # TODO: handle message sent via contact form
         print(name, email, message)
 
     return render(

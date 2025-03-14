@@ -6,19 +6,31 @@ from django.shortcuts import get_object_or_404, redirect
 from django.conf import settings
 from django.urls import path
 
+from app.forms.base import BaseStartDateEndDateForm
 from app.models import ProjectImage, Project
 
 
-class ImageInline(admin.TabularInline):
+class ProjectImageInline(admin.TabularInline):
     model = ProjectImage
     extra = 1
 
 
-class ProjectAdmin(admin.ModelAdmin):
-    # TODO: use pillow to resize project images to the same proportion
+class ProjectAdminForm(BaseStartDateEndDateForm):
+    class Meta:
+        model = Project
+        fields = "__all__"
 
-    list_display = ("title", "github_url", "fetch_github_button")
-    inlines = [ImageInline]
+
+class ProjectAdmin(admin.ModelAdmin):
+    form = ProjectAdminForm
+    inlines = [ProjectImageInline]
+    fieldsets = (
+        ("Project Information", {"fields": ("title", "company", "description")}),
+        ("Duration", {"fields": ("start_date", "end_date")}),
+        ("Details", {"fields": ("github_url", "topics")}),
+    )
+    search_fields = ("title", "company")
+    list_display = ("title", "company", "github_url", "fetch_github_button")
 
     def fetch_github_button(self, obj):
         return format_html(
@@ -49,11 +61,13 @@ class ProjectAdmin(admin.ModelAdmin):
             headers={"Authorization": f"Bearer {settings.GITHUB_TOKEN}"},
         )
 
+        # TODO: fetch project images within .github folder to automatically add into the project entry
+
         if response.ok:
             response_json = response.json()
             topics = response_json["topics"]
 
-            project.topics = topics
+            project.topics = [*project.topics, *topics]
 
             self.message_user(
                 request,
@@ -68,6 +82,11 @@ class ProjectAdmin(admin.ModelAdmin):
             )
 
         return redirect("/admin/app/project/")
+
+    def save_model(self, request, obj, form, change):
+        # TODO: resize project images in order to have consistent dimensions
+
+        super().save_model(request, obj, form, change)
 
 
 tagulous.admin.register(Project, ProjectAdmin)
