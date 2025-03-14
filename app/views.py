@@ -35,6 +35,7 @@ def index(request):
 def experiences(request):
     experiences = Experience.objects.all()
 
+    # TODO: make this abstraction at the moment we save experiences in admin page
     for experience in experiences:
         responsibility_block = False
         responsibilities = []
@@ -65,6 +66,8 @@ def experiences(request):
 
 def projects(request):
     projects = Project.objects.all()
+
+    # TODO: implement pagination to avoid send many projects with photos to browser
 
     return render(
         request,
