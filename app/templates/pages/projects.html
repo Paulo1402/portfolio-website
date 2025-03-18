@@ -3,6 +3,24 @@
 
 
 {% block main %}
+    <script>
+        // Resize all images in the carousel to the largest height
+        document.addEventListener('DOMContentLoaded', function () {
+            const projectImages = document.querySelectorAll('.carousel-item img')
+            let largestHeight = 0
+
+            projectImages.forEach(image => {
+                if (image.height > largestHeight) {
+                    largestHeight = image.height
+                }
+            })
+
+            projectImages.forEach(image => {
+                image.style.height = `${largestHeight}px`
+            })
+        })
+    </script>
+
     <div class="container">
         {% for project in projects %}
             <div class="card mt-5">

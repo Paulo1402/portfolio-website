@@ -1,3 +1,5 @@
+import io
+
 import requests
 import tagulous.admin
 from django.contrib import admin, messages
@@ -5,9 +7,11 @@ from django.utils.html import format_html
 from django.shortcuts import get_object_or_404, redirect
 from django.conf import settings
 from django.urls import path
+from PIL import Image
 
 from app.forms.base import BaseStartDateEndDateForm
 from app.models import ProjectImage, Project
+from app.utils.image import convert_image_to_inmemoryfile
 
 
 class ProjectImageInline(admin.TabularInline):
@@ -68,14 +72,29 @@ class ProjectAdmin(admin.ModelAdmin):
             headers={"Authorization": f"Bearer {settings.GITHUB_TOKEN}"},
         )
 
-        # TODO: fetch project images within .github folder to automatically add into the project entry
-
-        if response.ok:
+        try:
+            response.raise_for_status()
             response_json = response.json()
+
             topics = response_json["topics"]
             old_topics = project.topics.tag_model.objects.all()
 
             project.topics = [*old_topics, *topics]
+
+            images = self.fetch_project_images(project_name)
+
+            for image, name in images:
+                inmemory_image = convert_image_to_inmemoryfile(image, name)
+                project_image = project.project_images.filter(
+                    image__endswith=name
+                ).first()
+
+                # update the image if it exists
+                if project_image:
+                    project_image.image = inmemory_image
+                else:
+                    project.project_images.create(image=inmemory_image)
+
             project.save()
 
             self.message_user(
@@ -83,7 +102,9 @@ class ProjectAdmin(admin.ModelAdmin):
                 "Github data and images updated!",
                 level=messages.SUCCESS,
             )
-        else:
+        except Exception as e:
+            print("Failed to fetch Github data!", e)
+
             self.message_user(
                 request,
                 "Failed to fetch Github data!",
@@ -96,6 +117,42 @@ class ProjectAdmin(admin.ModelAdmin):
         # TODO: resize project images in order to have consistent dimensions
 
         super().save_model(request, obj, form, change)
+
+    def fetch_project_images(
+        self,
+        project: str,
+    ):
+        project_images = []
+        extensions_available = [".png", ".jpg", ".jpeg"]
+
+        response = requests.get(
+            f"https://api.github.com/repos/{project}/contents/.github",
+            headers={"Authorization": f"Bearer {settings.GITHUB_TOKEN}"},
+        )
+
+        response.raise_for_status()
+        response_json = response.json()
+
+        for content in response_json:
+            content_name = content["name"]
+            is_image = any(
+                [content_name.endswith(extension) for extension in extensions_available]
+            )
+
+            if is_image:
+                img_url = content["download_url"]
+                response = requests.get(
+                    img_url,
+                    headers={"Authorization": f"Bearer {settings.GITHUB_TOKEN}"},
+                )
+
+                if response.status_code == 200:
+                    data = response.content
+                    image = Image.open(io.BytesIO(data))
+
+                    project_images.append((image, content_name))
+
+        return project_images
 
 
 tagulous.admin.register(Project, ProjectAdmin)
