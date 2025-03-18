@@ -1,6 +1,9 @@
+import sys
+
 from django.db.models import Value
 from django.db.models.functions import Coalesce
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from .models import Profile, Skill, Experience, Project, Formation, Certification
 
@@ -10,7 +13,8 @@ def index(request):
     skills = Skill.objects.filter(show=True, area__show=True).order_by(
         Coalesce(
             "area__index", Value(9999)
-        )  # This field may be null, so it's important to handle before trying to order
+        ),  # This field may be null, so it's important to handle before trying to order
+        "name",  # Order by skill name
     )
 
     skills_by_area = {}
@@ -33,7 +37,7 @@ def index(request):
 
 
 def experiences(request):
-    experiences = Experience.objects.all()
+    experiences = Experience.objects.all().order_by("-start_date")
 
     # TODO: make this abstraction at the moment we save experiences in admin page
     for experience in experiences:
@@ -65,7 +69,7 @@ def experiences(request):
 
 
 def projects(request):
-    projects = Project.objects.all()
+    projects = Project.objects.all().order_by("-start_date")
 
     # TODO: implement pagination to avoid send many projects with photos to browser
 
@@ -77,7 +81,7 @@ def projects(request):
 
 
 def formation(request):
-    formation = Formation.objects.all()
+    formation = Formation.objects.all().order_by("-start_date")
 
     return render(
         request,
@@ -90,7 +94,7 @@ def formation(request):
 
 
 def certifications(request):
-    certifications = Certification.objects.all()
+    certifications = Certification.objects.all().order_by("-start_date")
 
     return render(
         request,
@@ -101,14 +105,6 @@ def certifications(request):
 
 def contact(request):
     profile = Profile.objects.first()
-
-    if request.method == "POST":
-        name = request.POST.get("name", "").strip()
-        email = request.POST.get("email", "").strip()
-        message = request.POST.get("message", "").strip()
-
-        # TODO: handle message sent via contact form
-        print(name, email, message)
 
     return render(
         request,
@@ -128,6 +124,29 @@ def contact(request):
     )
 
 
-def handler_404(request, exception):
-    print("exception", exception)
+def contact_message(request):
+    name = request.POST.get("name", "").strip()
+    email = request.POST.get("email", "").strip()
+    message = request.POST.get("message", "").strip()
+
+    # TODO: handle message sent via contact form
+    print(name, email, message)
+
+    messages.success(request, "Mensagem enviada com sucesso!")
+
+    return redirect("contact")
+
+
+def handler_404(request, *args, **kwargs):
+    # TODO: integrate log system
+    print("exception 404", args, kwargs)
     return render(request, "global/pages/404.html", status=404)
+
+
+def handler_500(request, *args, **kwargs):
+    exc_type, exc_value, exc_traceback = sys.exc_info()
+    error_message = str(exc_value)
+
+    # TODO: integrate log system
+    print("exception 500", error_message)
+    return render(request, "global/pages/500.html", status=500)

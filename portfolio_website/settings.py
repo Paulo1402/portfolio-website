@@ -13,10 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
-import dotenv
+import decouple
 
-# Load variables from .env
-dotenv.load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,12 +24,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "INSECURE")
+SECRET_KEY = decouple.config("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False if os.getenv("DJANGO_DEBUG") == "false" else True
+DEBUG = decouple.config("DJANGO_DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
+ALLOWED_HOSTS = decouple.config("DJANGO_ALLOWED_HOSTS", cast=decouple.Csv())
+
+CSRF_TRUSTED_ORIGINS = decouple.config(
+    "DJANGO_CSRF_TRUSTED_ORIGINS", cast=decouple.Csv()
+)
 
 
 # Application definition
@@ -134,6 +136,7 @@ LANGUAGE_CODE = "pt-br"
 
 TIME_ZONE = "America/Sao_Paulo"
 
+# TODO: add support to english by using https://django-parler.readthedocs.io/en/stable/
 USE_I18N = True
 
 USE_TZ = True
@@ -155,4 +158,4 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Project variables
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_TOKEN = decouple.config("GITHUB_TOKEN")

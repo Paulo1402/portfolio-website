@@ -18,6 +18,7 @@ class ExperienceAdmin(admin.ModelAdmin):
         ("Duration", {"fields": ("start_date", "end_date")}),
         ("Details", {"fields": ("description", "topics")}),
     )
+    list_display = ("title", "company", "created_at", "updated_at")
 
 
 tagulous.admin.register(Experience, ExperienceAdmin)

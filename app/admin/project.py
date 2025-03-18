@@ -30,7 +30,14 @@ class ProjectAdmin(admin.ModelAdmin):
         ("Details", {"fields": ("github_url", "topics")}),
     )
     search_fields = ("title", "company")
-    list_display = ("title", "company", "github_url", "fetch_github_button")
+    list_display = (
+        "title",
+        "company",
+        "github_url",
+        "fetch_github_button",
+        "created_at",
+        "updated_at",
+    )
 
     def fetch_github_button(self, obj):
         return format_html(
@@ -66,8 +73,10 @@ class ProjectAdmin(admin.ModelAdmin):
         if response.ok:
             response_json = response.json()
             topics = response_json["topics"]
+            old_topics = project.topics.tag_model.objects.all()
 
-            project.topics = [*project.topics, *topics]
+            project.topics = [*old_topics, *topics]
+            project.save()
 
             self.message_user(
                 request,

@@ -3,15 +3,13 @@
 {% block main %}
     <script>
         function handleEmailClick(e) {
-            window.navigator.clipboard.writeText("{{ email }}");
-
             const el = e.target
-            const originalContent = el.innerHTML
 
+            window.navigator.clipboard.writeText("{{ email }}");
             el.innerText = "E-mail copiado!"
 
             setTimeout(() => {
-                el.innerHTML = originalContent
+                el.innerHTML = 'Copiar e-mail <i class="bi bi-clipboard"></i>'
             }, 1500)
         }
     </script>
@@ -63,7 +61,15 @@
             Formulário de contato
         </h3>
 
-        <form action="{% url 'contact' %}" method="POST">
+        {% if messages %}
+            <div class="alert alert-success mt-3" role="alert">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form action="{% url 'contact_message' %}" method="POST">
             {% csrf_token %}
 
             <div class="mb-3">
@@ -77,9 +83,8 @@
             </div>
             <div class="mb-3">
                 <label for="message" class="form-label">Mensagem</label>
-                <textarea class="form-control" id="message" name="message" rows="3"
-                          placeholder="Escreva sua mensagem" required>
-                </textarea>
+                <textarea class="form-control" id="message" name="message" rows="3" placeholder="Escreva sua mensagem"
+                          required></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary">Enviar</button>

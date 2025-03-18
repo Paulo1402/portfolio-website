@@ -1,7 +1,9 @@
 from django.db import models
 
+from app.models.base import BaseModel
 
-class Profile(models.Model):
+
+class Profile(BaseModel):
     description = models.TextField()
     email = models.EmailField(null=True, blank=True)
     linkedin = models.URLField(null=True, blank=True)

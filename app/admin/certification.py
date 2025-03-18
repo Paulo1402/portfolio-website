@@ -9,6 +9,7 @@ class CertificationAdminForm(BaseStartDateEndDateForm):
     class Meta:
         model = Certification
         fields = "__all__"
+        exclude = ("created_at", "updated_at")
 
 
 class CertificationAdmin(admin.ModelAdmin):
@@ -18,6 +19,7 @@ class CertificationAdmin(admin.ModelAdmin):
         ("Duration", {"fields": ("start_date", "end_date")}),
         ("Details", {"fields": ("description", "url", "topics")}),
     )
+    list_display = ("title", "institution", "created_at", "updated_at")
 
 
 tagulous.admin.register(Certification, CertificationAdmin)

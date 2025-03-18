@@ -1,7 +1,15 @@
 from django.db import models
 
 
-class BaseStartDateEndDateModel(models.Model):
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class BaseStartDateEndDateModel(BaseModel):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
 
