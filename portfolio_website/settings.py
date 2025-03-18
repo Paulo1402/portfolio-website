@@ -91,7 +91,7 @@ WSGI_APPLICATION = "portfolio_website.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # Database configuration
-if os.getenv("DJANGO_ENV") == "production":
+if decouple.config("DJANGO_ENV") == "production":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -102,6 +102,7 @@ if os.getenv("DJANGO_ENV") == "production":
             "PORT": os.getenv("POSTGRES_PORT", "5432"),
         }
     }
+    print("🎲 Starting Django on PostgreSQL")
 else:
     DATABASES = {
         "default": {
@@ -109,6 +110,7 @@ else:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+    print("🎲 Starting Django on SQLite")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
