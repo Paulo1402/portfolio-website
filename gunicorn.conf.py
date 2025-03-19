@@ -3,3 +3,4 @@ workers = 3  # Adjust based on CPU cores
 timeout = 120
 accesslog = "-"
 errorlog = "-"
+loglevel = "info"

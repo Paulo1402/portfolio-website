@@ -95,11 +95,11 @@ if decouple.config("DJANGO_ENV") == "production":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("POSTGRES_DB"),
-            "USER": os.getenv("POSTGRES_USER"),
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-            "HOST": os.getenv("POSTGRES_HOST"),
-            "PORT": os.getenv("POSTGRES_PORT", "5432"),
+            "NAME": decouple.config("POSTGRES_DB"),
+            "USER": decouple.config("POSTGRES_USER"),
+            "PASSWORD": decouple.config("POSTGRES_PASSWORD"),
+            "HOST": decouple.config("POSTGRES_HOST"),
+            "PORT": decouple.config("POSTGRES_PORT", "5432"),
         }
     }
     print("🎲 Starting Django on PostgreSQL")
