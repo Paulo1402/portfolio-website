@@ -3,6 +3,7 @@ import io
 import requests
 import tagulous.admin
 from django.contrib import admin, messages
+from django.db.models.fields.files import ImageFieldFile
 from django.utils.html import format_html
 from django.shortcuts import get_object_or_404, redirect
 from django.conf import settings
@@ -11,7 +12,11 @@ from PIL import Image
 
 from app.forms.base import BaseStartDateEndDateForm
 from app.models import ProjectImage, Project
-from app.utils.image import convert_image_to_inmemoryfile, resize_and_pad_image
+from app.utils.image import (
+    convert_image_to_inmemoryfile,
+    resize_and_pad_image,
+    get_max_image_dimensions,
+)
 
 
 class ProjectImageInline(admin.TabularInline):
@@ -82,10 +87,12 @@ class ProjectAdmin(admin.ModelAdmin):
             project.topics = [*old_topics, *topics]
 
             images = self.fetch_project_images(project_name)
+            width, height = get_max_image_dimensions([image[0] for image in images])
 
             for image, name in images:
+                resized_image = resize_and_pad_image(image, width, height)
                 inmemory_image = convert_image_to_inmemoryfile(
-                    image, name, image_format=image.format
+                    resized_image, name, image_format=image.format
                 )
                 project_image = project.project_images.filter(
                     image__endswith=name
@@ -119,22 +126,28 @@ class ProjectAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
         project_images = obj.project_images.all()
-        self.resize_and_pad_images(project_images)
+        self.resize_and_pad_images(list(project_images))
 
-    def resize_and_pad_images(self, images):
-        width, height = self.get_max_image_dimensions(images)
+    @staticmethod
+    def resize_and_pad_images(product_images: list[ProjectImage]):
+        width, height = get_max_image_dimensions(
+            [product_image.image for product_image in product_images]
+        )
 
-        for image_entry in images:
-            image_entry.image.open()
-            old_image = Image.open(image_entry.image)
+        for product_image in product_images:
+            image = product_image.image
+            image_name = image.name
+            image.open()  # The image must be open before using Image.open from PIL
 
-            resized_image = resize_and_pad_image(old_image, width, height)
+            image = Image.open(image)
+
+            resized_image = resize_and_pad_image(image, width, height)
             inmemory_image = convert_image_to_inmemoryfile(
-                resized_image, image_entry.name, image_format=image_entry.format
+                resized_image, image_name, image_format=image.format
             )
 
-            image_entry.image = inmemory_image
-            image_entry.save()
+            product_image.image = inmemory_image
+            product_image.save()
 
     @staticmethod
     def fetch_project_images(project: str):
@@ -169,25 +182,6 @@ class ProjectAdmin(admin.ModelAdmin):
                     project_images.append((image, content_name))
 
         return project_images
-
-    @staticmethod
-    def get_max_image_dimensions(
-        images_entries: list[ProjectImage],
-    ) -> tuple[int, int]:
-        width = 0
-        height = 0
-
-        for image_entry in images_entries:
-            image_width, image_height = (
-                image_entry.image.height,
-                image_entry.image.width,
-            )
-
-            if image_width > width and image_height > height:
-                width = image_width
-                height = image_height
-
-        return width, height
 
 
 tagulous.admin.register(Project, ProjectAdmin)
