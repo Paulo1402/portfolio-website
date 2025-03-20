@@ -3,26 +3,34 @@
 
 
 {% block main %}
-    <script>
-        // Resize all images in the carousel to the largest height
-        document.addEventListener('DOMContentLoaded', function () {
-            const projectImages = document.querySelectorAll('.carousel-item img')
-            let largestHeight = 0
-
-            projectImages.forEach(image => {
-                if (image.height > largestHeight) {
-                    largestHeight = image.height
-                }
-            })
-
-            projectImages.forEach(image => {
-                image.style.height = `${largestHeight}px`
-            })
-        })
-    </script>
+    {#    <script>#}
+    {#        // Resize all images in the carousel to the largest height#}
+    {#        document.addEventListener('DOMContentLoaded', function () {#}
+    {#            const projectImagesCarousel = document.querySelectorAll('.carousel')#}
+    {##}
+    {#            for (let i = 0; i < projectImagesCarousel.length; i++) {#}
+    {#                const projectImages = projectImagesCarousel[i].querySelectorAll('.carousel-item img')#}
+    {#                let largestHeight = 0#}
+    {##}
+    {#                projectImages.forEach(image => {#}
+    {#                    if (image.height > largestHeight) {#}
+    {#                        largestHeight = image.height#}
+    {#                    }#}
+    {#                })#}
+    {##}
+    {#                projectImages.forEach(image => {#}
+    {#                    image.style.height = `${largestHeight}px`#}
+    {#                })#}
+    {#            }#}
+    {#        })#}
+    {#    </script>#}
 
     <div class="container">
         {% for project in projects %}
+            {% if not forloop.first %}
+                <hr class="mt-5">
+            {% endif %}
+
             <div class="card mt-5">
                 <div class="card-body">
                     <h5 class="card-title">{{ project.title }}</h5>
@@ -47,38 +55,44 @@
                     {% endif %}
 
                     {% if project.project_images %}
-                        <div id="carousel-{{ project.id }}" class="carousel slide mt-3">
-                            <div class="carousel-indicators">
-                                {% for project_image in project.project_images.all %}
-                                    <button type="button"
-                                            data-bs-target="#carousel-{{ project.id }}"
-                                            data-bs-slide-to="{{ forloop.counter0 }}"
-                                            {% if forloop.first %}class="active"{% endif %}></button>
-                                {% endfor %}
-                            </div>
+                        {% if project.project_images.count > 1 %}
+                            <div id="carousel-{{ project.id }}" class="carousel slide mt-3">
+                                <div class="carousel-indicators">
+                                    {% for project_image in project.project_images.all %}
+                                        <button type="button"
+                                                data-bs-target="#carousel-{{ project.id }}"
+                                                data-bs-slide-to="{{ forloop.counter0 }}"
+                                                {% if forloop.first %}class="active"{% endif %}></button>
+                                    {% endfor %}
+                                </div>
 
-                            <div class="carousel-inner">
-                                {% for project_image in project.project_images.all %}
-                                    <div class="carousel-item{% if forloop.first %} active{% endif %}">
-                                        <img src="{{ project_image.image.url }}"
-                                             class="d-block w-100"
-                                             alt="{{ project.title }}{{ forloop.counter }}">
-                                    </div>
-                                {% endfor %}
+                                <div class="carousel-inner">
+                                    {% for project_image in project.project_images.all %}
+                                        <div class="carousel-item{% if forloop.first %} active{% endif %}">
+                                            <img src="{{ project_image.image.url }}"
+                                                 class="d-block w-100"
+                                                 alt="{{ project.title }}{{ forloop.counter }}">
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carousel-{{ project.id }}"
+                                        data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Anterior</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carousel-{{ project.id }}"
+                                        data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Próxima</span>
+                                </button>
                             </div>
-                            <button class="carousel-control-prev" type="button"
-                                    data-bs-target="#carousel-{{ project.id }}"
-                                    data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Anterior</span>
-                            </button>
-                            <button class="carousel-control-next" type="button"
-                                    data-bs-target="#carousel-{{ project.id }}"
-                                    data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Próxima</span>
-                            </button>
-                        </div>
+                        {% else %}
+                            <img src="{{ project.project_images.first.image.url }}"
+                                 class="img-fluid mt-3"
+                                 alt="{{ project.title }}">
+                        {% endif %}
                     {% endif %}
 
                     {% if project.github_url %}

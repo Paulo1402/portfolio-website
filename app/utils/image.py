@@ -15,15 +15,15 @@ def resize_and_pad_image(
     padded_img = ImageOps.pad(
         img,
         target,
-        # color=(0, 0, 0),
     )
 
     return padded_img
 
 
-def convert_image_to_inmemoryfile(image: ImageFile, name: str) -> InMemoryUploadedFile:
+def convert_image_to_inmemoryfile(
+    image: ImageFile | Image, name: str, image_format: str
+) -> InMemoryUploadedFile:
     output = io.BytesIO()
-    image_format = image.format
 
     image.save(output, format=image_format)
     output.seek(0)

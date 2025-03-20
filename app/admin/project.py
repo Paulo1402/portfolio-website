@@ -11,7 +11,7 @@ from PIL import Image
 
 from app.forms.base import BaseStartDateEndDateForm
 from app.models import ProjectImage, Project
-from app.utils.image import convert_image_to_inmemoryfile
+from app.utils.image import convert_image_to_inmemoryfile, resize_and_pad_image
 
 
 class ProjectImageInline(admin.TabularInline):
@@ -77,14 +77,16 @@ class ProjectAdmin(admin.ModelAdmin):
             response_json = response.json()
 
             topics = response_json["topics"]
-            old_topics = project.topics.tag_model.objects.all()
+            old_topics = project.topics.all()
 
             project.topics = [*old_topics, *topics]
 
             images = self.fetch_project_images(project_name)
 
             for image, name in images:
-                inmemory_image = convert_image_to_inmemoryfile(image, name)
+                inmemory_image = convert_image_to_inmemoryfile(
+                    image, name, image_format=image.format
+                )
                 project_image = project.project_images.filter(
                     image__endswith=name
                 ).first()
@@ -113,15 +115,29 @@ class ProjectAdmin(admin.ModelAdmin):
 
         return redirect("/admin/app/project/")
 
-    def save_model(self, request, obj, form, change):
-        # TODO: resize project images in order to have consistent dimensions
-
+    def save_model(self, request, obj: Project, form, change):
         super().save_model(request, obj, form, change)
 
-    def fetch_project_images(
-        self,
-        project: str,
-    ):
+        project_images = obj.project_images.all()
+        self.resize_and_pad_images(project_images)
+
+    def resize_and_pad_images(self, images):
+        width, height = self.get_max_image_dimensions(images)
+
+        for image_entry in images:
+            image_entry.image.open()
+            old_image = Image.open(image_entry.image)
+
+            resized_image = resize_and_pad_image(old_image, width, height)
+            inmemory_image = convert_image_to_inmemoryfile(
+                resized_image, image_entry.name, image_format=image_entry.format
+            )
+
+            image_entry.image = inmemory_image
+            image_entry.save()
+
+    @staticmethod
+    def fetch_project_images(project: str):
         project_images = []
         extensions_available = [".png", ".jpg", ".jpeg"]
 
@@ -153,6 +169,25 @@ class ProjectAdmin(admin.ModelAdmin):
                     project_images.append((image, content_name))
 
         return project_images
+
+    @staticmethod
+    def get_max_image_dimensions(
+        images_entries: list[ProjectImage],
+    ) -> tuple[int, int]:
+        width = 0
+        height = 0
+
+        for image_entry in images_entries:
+            image_width, image_height = (
+                image_entry.image.height,
+                image_entry.image.width,
+            )
+
+            if image_width > width and image_height > height:
+                width = image_width
+                height = image_height
+
+        return width, height
 
 
 tagulous.admin.register(Project, ProjectAdmin)

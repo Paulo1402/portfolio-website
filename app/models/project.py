@@ -14,6 +14,8 @@ class Project(BaseStartDateEndDateModel):
     company = models.CharField(max_length=100, default="Projeto Pessoal")
     description = models.TextField()
     github_url = models.URLField(null=True, blank=True)
+    # fetched_at = models.DateTimeField(null=True, blank=True)
+    # show_repository = models.BooleanField(default=True)
     topics = tagulous.models.TagField(Topic, blank=True)
 
     def __str__(self):
