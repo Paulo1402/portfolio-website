@@ -5,3 +5,7 @@
 .nav-link:hover {
     opacity: 0.9;
 }
+
+body {
+    overflow-y: scroll; /* Prevent layout shifts when clicking navbar links */
+}

@@ -54,7 +54,7 @@
                         </div>
                     {% endif %}
 
-                    {% if project.project_images %}
+                    {% if project.project_images.count %}
                         {% if project.project_images.count > 1 %}
                             <div id="carousel-{{ project.id }}" class="carousel slide mt-3">
                                 <div class="carousel-indicators">
