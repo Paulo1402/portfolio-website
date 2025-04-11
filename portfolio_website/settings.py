@@ -13,11 +13,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 
 import decouple
-
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -34,10 +33,10 @@ CSRF_TRUSTED_ORIGINS = decouple.config(
     "DJANGO_CSRF_TRUSTED_ORIGINS", cast=decouple.Csv()
 )
 
-
 # Application definition
 
 INSTALLED_APPS = [
+    # "modeltranslation",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -46,6 +45,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "app",
     "tagulous",
+    "parler",
+    "rosetta"
 ]
 
 SERIALIZATION_MODULES = {
@@ -58,6 +59,9 @@ SERIALIZATION_MODULES = {
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    
+    'django.middleware.locale.LocaleMiddleware',
+
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -84,7 +88,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "portfolio_website.wsgi.application"
-
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -129,7 +132,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -142,6 +144,26 @@ USE_I18N = True
 
 USE_TZ = True
 
+LANGUAGES = (
+    ("en", _("English")),
+    ("pt-br", _("Portuguese")),
+)
+
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
+
+# Parler settings
+PARLER_LANGUAGES = {
+    None: (
+        {"code": "en", "name": _("English")},
+        {"code": "pt-br", "name": _("Portuguese")},
+    ),
+    "default": {
+        "fallbacks": ["en", "pt-br"],
+        "hide_untranslated": False,
+    },
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

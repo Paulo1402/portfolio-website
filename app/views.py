@@ -4,6 +4,7 @@ from django.db.models import Value
 from django.db.models.functions import Coalesce
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.utils.translation import gettext as _
 
 from .models import Profile, Skill, Experience, Project, Formation, Certification
 
@@ -45,8 +46,10 @@ def experiences(request):
         responsibilities = []
         description = []
 
+        print('## translated:', _("Responsibilities"), experience.description)
+
         for line in experience.description.splitlines():
-            if line.startswith("Responsabilidades"):
+            if line.startswith(_("Responsibilities")):
                 responsibility_block = True
             elif responsibility_block:
                 line = line.replace("•", "").strip()
@@ -132,7 +135,7 @@ def contact_message(request):
     # TODO: handle message sent via contact form
     print(name, email, message)
 
-    messages.success(request, "Mensagem enviada com sucesso!")
+    messages.success(request, f'{_("Message sent successfully!")} Hello {name}!')
 
     return redirect("contact")
 

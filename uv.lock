@@ -107,6 +107,45 @@ wheels = [
 ]
 
 [[package]]
+name = "django-modeltranslation"
+version = "0.19.13"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/44/e1/54a2f2cff0bf6c5798a0185f4b962d680999a8f0207a61f8aebb75ff8226/django_modeltranslation-0.19.13.tar.gz", hash = "sha256:df2516fdfb6a865fd1dfdda74e549d437d8ca148c1d435663db36edb6863f34e", size = 76720 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/10/a9/87ddfca789c95e8aaa7d5481d00184046cad925f943aeaee31dd21e62f0b/django_modeltranslation-0.19.13-py3-none-any.whl", hash = "sha256:69b7dc9a8bae152ab84caf969a5ad478f588f4d9f8345545d4f20f66eeb51ef6", size = 53996 },
+]
+
+[[package]]
+name = "django-parler"
+version = "2.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8c/2b/2423d31620efe8ab0d0390e60afab4f9cc2e62d4bf39fe0e05df0eef1b93/django-parler-2.3.tar.gz", hash = "sha256:2c8f5012ceb5e49af93b16ea3fe4d0c83d70b91b2d0f470c05d7d742b6f3083d", size = 69167 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/47/38/11f1a7e3d56f3a6b74cf99e307f2554b741cadebc9b1c45b05e2ec1f35a2/django_parler-2.3-py3-none-any.whl", hash = "sha256:8f6c8061e4b5690f1ee2d8e5760940ef06bf78a5bfa033d11178377559c749cf", size = 83288 },
+]
+
+[[package]]
+name = "django-rosetta"
+version = "0.10.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "polib" },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ff/d0/7c5de2e1479f9a97af8d86a6173ea635ec819b3848f5c4ea852b3f22b173/django_rosetta-0.10.2.tar.gz", hash = "sha256:7e02427fe43b578dc12e02d6ce2cb4d045cc751a91b6e7f2c5ef4f706e1fb3d0", size = 262724 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0f/0b/0a0088fa3721c0bddbd52177b072b0e8065be9ced68f9b579c55bd01d706/django_rosetta-0.10.2-py3-none-any.whl", hash = "sha256:44bd2b9ff2b88322d1a1f0cae62d8dfd4996b465f4a22a31f016cfd64d022352", size = 122592 },
+]
+
+[[package]]
 name = "django-tagulous"
 version = "2.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -243,11 +282,23 @@ wheels = [
 ]
 
 [[package]]
+name = "polib"
+version = "1.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/10/9a/79b1067d27e38ddf84fe7da6ec516f1743f31f752c6122193e7bce38bdbf/polib-1.2.0.tar.gz", hash = "sha256:f3ef94aefed6e183e342a8a269ae1fc4742ba193186ad76f175938621dbfc26b", size = 161658 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6b/99/45bb1f9926efe370c6dbe324741c749658e44cb060124f28dad201202274/polib-1.2.0-py2.py3-none-any.whl", hash = "sha256:1c77ee1b81feb31df9bca258cbc58db1bbb32d10214b173882452c73af06d62d", size = 20634 },
+]
+
+[[package]]
 name = "portfolio-website"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "django" },
+    { name = "django-modeltranslation" },
+    { name = "django-parler" },
+    { name = "django-rosetta" },
     { name = "django-tagulous" },
     { name = "gunicorn" },
     { name = "pillow" },
@@ -266,6 +317,9 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "django", specifier = ">=5.1.4" },
+    { name = "django-modeltranslation", specifier = ">=0.19.13" },
+    { name = "django-parler", specifier = ">=2.3" },
+    { name = "django-rosetta", specifier = ">=0.10.2" },
     { name = "django-tagulous", specifier = ">=2.1.0" },
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "pillow", specifier = ">=11.1.0" },

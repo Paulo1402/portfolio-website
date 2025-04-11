@@ -6,6 +6,7 @@ from .certification import CertificationAdmin
 from .profile import ProfileAdmin
 from .formation import FormationAdmin
 from .experience import ExperienceAdmin
+from .parler import NewsAdmin
 
 
 __all__ = [

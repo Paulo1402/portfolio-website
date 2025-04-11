@@ -1,0 +1,36 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-11 18:02-0300\n"
+"PO-Revision-Date: 2025-04-11 18:02-0300\n"
+"Last-Translator:   <paulobenatto02@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Translated-Using: django-rosetta 0.10.2\n"
+
+#: app/templates/pages/experiences.html:34 app/views.py:49 app/views.py:52
+msgid "Responsibilities"
+msgstr "Responsabilidades"
+
+#: app/views.py:138
+msgid "Message sent successfully!"
+msgstr "Mensagem enviada com sucesso!"
+
+#: portfolio_website/settings.py:148 portfolio_website/settings.py:159
+msgid "English"
+msgstr "Inglês"
+
+#: portfolio_website/settings.py:149 portfolio_website/settings.py:160
+msgid "Portuguese"
+msgstr "Português"
