@@ -66,18 +66,32 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item">
-                        {% if LANGUAGE_CODE == "pt-br" %}
-                            <a class="nav-link" href="{% switch_language_url 'en' %}">
-                                <i class="bi bi-translate"></i>
-                                EN
-                            </a>
-                        {% else %}
-                            <a class="nav-link" href="{% switch_language_url 'pt-br' %}">
-                                <i class="bi bi-translate"></i>
-                                PT
-                            </a>
-                        {% endif %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" id="bd-language"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-translate"></i>
+                            <span id="language-label" class="d-lg-none ms-2">Idioma</span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="bd-language"
+                            data-current-language="{{ LANGUAGE_CODE }}"
+                            data-pt-url="{% switch_language_url 'pt-br' %}"
+                            data-en-url="{% switch_language_url 'en' %}">
+                            <li>
+                                <a class="dropdown-item" role="button" data-language="pt-br">
+                                    <i class="bi bi-flag me-2"></i>Português
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" role="button" data-language="en">
+                                    <i class="bi bi-flag-fill me-2"></i>English
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" role="button" data-language="auto">
+                                    <i class="bi bi-magic me-2"></i>Auto
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
