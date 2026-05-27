@@ -1,6 +1,7 @@
 import tagulous.admin
-from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 
+from app.admin.mixins import TaggedModelAdminCompat
 from app.models import Formation
 from app.forms.base import BaseStartDateEndDateForm
 
@@ -11,7 +12,7 @@ class FormationAdminForm(BaseStartDateEndDateForm):
         fields = "__all__"
 
 
-class FormationAdmin(admin.ModelAdmin):
+class FormationAdmin(TranslationAdmin, TaggedModelAdminCompat):
     form = FormationAdminForm
     fieldsets = (
         ("Certification Information", {"fields": ("title", "institution")}),

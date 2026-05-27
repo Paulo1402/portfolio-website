@@ -1,9 +1,10 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 
 from app.models import Skill
 
 
-class SkillAdmin(admin.ModelAdmin):
+class SkillAdmin(TranslationAdmin):
     list_display = ("name", "area", "show", "created_at", "updated_at")
 
 
