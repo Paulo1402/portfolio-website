@@ -1,4 +1,5 @@
 {% extends 'global/pages/base.html' %}
+{% load i18n %}
 
 {% block main %}
     <div class="container">
@@ -17,7 +18,7 @@
                             {% if experience.end_date %}
                                 {{ experience.end_date | date:"F Y" }}
                             {% else %}
-                                Atual
+                                {% translate "Present" %}
                             {% endif %}
                         </small>
                     </h6>
@@ -30,7 +31,7 @@
 
                     {% if experience.responsibilities %}
                         <div class="experience-responsibilities">
-                            Responsabilidades:
+                            {% translate "Responsibilities" %}:
                             <ul>
                                 {% for responsibility in experience.responsibilities %}
                                     <li>{{ responsibility }}</li>

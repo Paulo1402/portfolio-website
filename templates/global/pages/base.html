@@ -1,7 +1,8 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <!doctype html>
-<html lang="pt-br" class="h-100">
+<html lang="{{ LANGUAGE_CODE }}" class="h-100">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
