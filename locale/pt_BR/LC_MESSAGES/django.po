@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 21:40-0300\n"
+"POT-Creation-Date: 2026-05-27 21:57-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,217 +17,206 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
 #: app/models/project.py:27
 msgid "Personal Project"
-msgstr ""
+msgstr "Projeto Pessoal"
 
 #: app/templates/pages/certifications.html:21
 #: app/templates/pages/experiences.html:21
 #: app/templates/pages/formation.html:21 app/templates/pages/projects.html:45
 msgid "Present"
-msgstr ""
+msgstr "Atual"
 
 #: app/templates/pages/certifications.html:34
 msgid "View certification"
-msgstr ""
+msgstr "Exibir certificação"
 
 #: app/templates/pages/contact.html:8
 msgid "Email copied!"
-msgstr ""
+msgstr "E-mail copiado!"
 
 #: app/templates/pages/contact.html:9 app/templates/pages/contact.html:30
 msgid "Copy email"
-msgstr ""
+msgstr "Copiar e-mail"
 
 #: app/templates/pages/contact.html:25 app/templates/pages/contact.html:85
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: app/templates/pages/contact.html:39 templates/global/partials/footer.html:26
 msgid "LinkedIn"
-msgstr ""
+msgstr "LinkedIn"
 
 #: app/templates/pages/contact.html:43
 msgid "Open LinkedIn"
-msgstr ""
+msgstr "Acessar LinkedIn"
 
 #: app/templates/pages/contact.html:52
 msgid "GitHub"
-msgstr ""
+msgstr "GitHub"
 
 #: app/templates/pages/contact.html:56
 msgid "Open GitHub"
-msgstr ""
+msgstr "Acessar GitHub"
 
 #: app/templates/pages/contact.html:64
 msgid "Contact form"
-msgstr ""
+msgstr "Formulário de contato"
 
 #: app/templates/pages/contact.html:79
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: app/templates/pages/contact.html:81
 msgid "Your name"
-msgstr ""
+msgstr "Seu nome"
 
 #: app/templates/pages/contact.html:87
 msgid "Your email"
-msgstr ""
+msgstr "Seu e-mail"
 
 #: app/templates/pages/contact.html:90
 msgid "Message"
-msgstr ""
+msgstr "Mensagem"
 
 #: app/templates/pages/contact.html:92
 msgid "Write your message"
-msgstr ""
+msgstr "Escreva sua mensagem"
 
 #: app/templates/pages/contact.html:95
 msgid "Send"
-msgstr ""
+msgstr "Enviar"
 
 #: app/templates/pages/experiences.html:34
 msgid "Responsibilities"
-msgstr ""
+msgstr "Responsabilidades"
 
 #: app/templates/pages/index.html:8
 msgid "Profile photo"
-msgstr ""
+msgstr "Foto de perfil"
 
-#: app/templates/pages/index.html:14
-msgid ""
-"\n"
-"                Beautiful is better than ugly. Explicit is better than "
-"implicit. Simple is better than complex. [...]\n"
-"            "
-msgstr ""
-
-#: app/templates/pages/index.html:17
-msgid "Zen of Python"
-msgstr ""
-
-#: app/templates/pages/index.html:26
+#: app/templates/pages/index.html:24
 msgid "Skills"
-msgstr ""
+msgstr "Habilidades"
 
 #: app/templates/pages/projects.html:81
 msgid "Previous"
-msgstr ""
+msgstr "Anterior"
 
 #: app/templates/pages/projects.html:87
 msgid "Next"
-msgstr ""
+msgstr "Próxima"
 
 #: app/templates/pages/projects.html:99
 msgid "View repository"
-msgstr ""
+msgstr "Ver repositório"
 
 #: app/views.py:33 templates/global/partials/header.html:15
 msgid "About"
-msgstr ""
+msgstr "Sobre mim"
 
 #: app/views.py:70 templates/global/partials/header.html:18
 msgid "Experience"
-msgstr ""
+msgstr "Experiências"
 
 #: app/views.py:82 templates/global/partials/header.html:21
 msgid "Projects"
-msgstr ""
+msgstr "Projetos"
 
 #: app/views.py:93 templates/global/partials/header.html:24
 msgid "Education"
-msgstr ""
+msgstr "Formação"
 
 #: app/views.py:105 templates/global/partials/header.html:27
 msgid "Certifications"
-msgstr ""
+msgstr "Certificações"
 
 #: app/views.py:116 templates/global/partials/header.html:30
 msgid "Contact"
-msgstr ""
+msgstr "Contato"
 
 #: app/views.py:138
 msgid "Message sent successfully!"
-msgstr ""
+msgstr "Mensagem enviada com sucesso!"
 
 #: portfolio_website/settings.py:148 templates/global/partials/header.html:84
 msgid "Portuguese"
-msgstr ""
+msgstr "Português"
 
 #: portfolio_website/settings.py:149 templates/global/partials/header.html:89
 msgid "English"
-msgstr ""
+msgstr "Inglês"
 
 #: templates/global/pages/404.html:43
 msgid "Oops! Page not found."
-msgstr ""
+msgstr "Oops! Página não encontrada."
 
 #: templates/global/pages/404.html:45
 msgid "The page you are looking for could not be found."
-msgstr ""
+msgstr "A página que você está procurando não foi encontrada."
 
 #: templates/global/pages/404.html:48 templates/global/pages/500.html:48
 msgid "Back to home page"
-msgstr ""
+msgstr "Voltar para a página inicial"
 
 #: templates/global/pages/500.html:43
 msgid "Oops! Something went wrong."
-msgstr ""
+msgstr "Oops! Algo deu errado."
 
 #: templates/global/pages/500.html:45
 msgid "Something went wrong on the server. Please try again later."
-msgstr ""
+msgstr "Algo deu errado no servidor, tente novamente mais tarde!"
 
 #: templates/global/pages/base.html:29
 msgid "Portfolio"
-msgstr ""
+msgstr "Portfólio"
 
 #: templates/global/partials/footer.html:5
 msgid "Built by Paulo Benatto"
-msgstr ""
+msgstr "Desenvolvido por Paulo Benatto"
 
 #: templates/global/partials/footer.html:7
 msgid "Application built with"
-msgstr ""
+msgstr "Aplicação desenvolvida usando"
 
 #: templates/global/partials/footer.html:10
 msgid "Django"
-msgstr ""
+msgstr "Django"
 
 #: templates/global/partials/footer.html:17
 msgid "Bootstrap"
-msgstr ""
+msgstr "Bootstrap"
 
 #: templates/global/partials/header.html:42
 msgid "Theme"
-msgstr ""
+msgstr "Tema"
 
 #: templates/global/partials/header.html:49
 msgid "Light"
-msgstr ""
+msgstr "Claro"
 
 #: templates/global/partials/header.html:56
 msgid "Dark"
-msgstr ""
+msgstr "Escuro"
 
 #: templates/global/partials/header.html:63
 #: templates/global/partials/header.html:94
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #: templates/global/partials/header.html:73
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 #: templates/global/partials/header.html:79
 msgid "Language: Auto"
-msgstr ""
+msgstr "Idioma: Auto"
 
 #: templates/global/partials/header.html:80
 msgid "Language: PT"
-msgstr ""
+msgstr "Idioma: PT"
 
 #: templates/global/partials/header.html:81
 msgid "Language: EN"
-msgstr ""
+msgstr "Idioma: EN"
