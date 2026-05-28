@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 
 import decouple
+from django.utils.translation import gettext_lazy as _
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,6 +39,7 @@ CSRF_TRUSTED_ORIGINS = decouple.config(
 # Application definition
 
 INSTALLED_APPS = [
+    "modeltranslation",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -58,6 +60,7 @@ SERIALIZATION_MODULES = {
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -137,10 +140,18 @@ LANGUAGE_CODE = "pt-br"
 
 TIME_ZONE = "America/Sao_Paulo"
 
-# TODO: add support to english by using https://django-parler.readthedocs.io/en/stable/
 USE_I18N = True
 
 USE_TZ = True
+
+LANGUAGES = (
+    ("pt-br", _("Portuguese")),
+    ("en", _("English")),
+)
+
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
 
 
 # Static files (CSS, JavaScript, Images)

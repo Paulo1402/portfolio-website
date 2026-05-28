@@ -1,0 +1,222 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-27 21:57-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: app/models/project.py:27
+msgid "Personal Project"
+msgstr "Projeto Pessoal"
+
+#: app/templates/pages/certifications.html:21
+#: app/templates/pages/experiences.html:21
+#: app/templates/pages/formation.html:21 app/templates/pages/projects.html:45
+msgid "Present"
+msgstr "Atual"
+
+#: app/templates/pages/certifications.html:34
+msgid "View certification"
+msgstr "Exibir certificação"
+
+#: app/templates/pages/contact.html:8
+msgid "Email copied!"
+msgstr "E-mail copiado!"
+
+#: app/templates/pages/contact.html:9 app/templates/pages/contact.html:30
+msgid "Copy email"
+msgstr "Copiar e-mail"
+
+#: app/templates/pages/contact.html:25 app/templates/pages/contact.html:85
+msgid "Email"
+msgstr "E-mail"
+
+#: app/templates/pages/contact.html:39 templates/global/partials/footer.html:26
+msgid "LinkedIn"
+msgstr "LinkedIn"
+
+#: app/templates/pages/contact.html:43
+msgid "Open LinkedIn"
+msgstr "Acessar LinkedIn"
+
+#: app/templates/pages/contact.html:52
+msgid "GitHub"
+msgstr "GitHub"
+
+#: app/templates/pages/contact.html:56
+msgid "Open GitHub"
+msgstr "Acessar GitHub"
+
+#: app/templates/pages/contact.html:64
+msgid "Contact form"
+msgstr "Formulário de contato"
+
+#: app/templates/pages/contact.html:79
+msgid "Name"
+msgstr "Nome"
+
+#: app/templates/pages/contact.html:81
+msgid "Your name"
+msgstr "Seu nome"
+
+#: app/templates/pages/contact.html:87
+msgid "Your email"
+msgstr "Seu e-mail"
+
+#: app/templates/pages/contact.html:90
+msgid "Message"
+msgstr "Mensagem"
+
+#: app/templates/pages/contact.html:92
+msgid "Write your message"
+msgstr "Escreva sua mensagem"
+
+#: app/templates/pages/contact.html:95
+msgid "Send"
+msgstr "Enviar"
+
+#: app/templates/pages/experiences.html:34
+msgid "Responsibilities"
+msgstr "Responsabilidades"
+
+#: app/templates/pages/index.html:8
+msgid "Profile photo"
+msgstr "Foto de perfil"
+
+#: app/templates/pages/index.html:24
+msgid "Skills"
+msgstr "Habilidades"
+
+#: app/templates/pages/projects.html:81
+msgid "Previous"
+msgstr "Anterior"
+
+#: app/templates/pages/projects.html:87
+msgid "Next"
+msgstr "Próxima"
+
+#: app/templates/pages/projects.html:99
+msgid "View repository"
+msgstr "Ver repositório"
+
+#: app/views.py:33 templates/global/partials/header.html:15
+msgid "About"
+msgstr "Sobre mim"
+
+#: app/views.py:70 templates/global/partials/header.html:18
+msgid "Experience"
+msgstr "Experiências"
+
+#: app/views.py:82 templates/global/partials/header.html:21
+msgid "Projects"
+msgstr "Projetos"
+
+#: app/views.py:93 templates/global/partials/header.html:24
+msgid "Education"
+msgstr "Formação"
+
+#: app/views.py:105 templates/global/partials/header.html:27
+msgid "Certifications"
+msgstr "Certificações"
+
+#: app/views.py:116 templates/global/partials/header.html:30
+msgid "Contact"
+msgstr "Contato"
+
+#: app/views.py:138
+msgid "Message sent successfully!"
+msgstr "Mensagem enviada com sucesso!"
+
+#: portfolio_website/settings.py:148 templates/global/partials/header.html:84
+msgid "Portuguese"
+msgstr "Português"
+
+#: portfolio_website/settings.py:149 templates/global/partials/header.html:89
+msgid "English"
+msgstr "Inglês"
+
+#: templates/global/pages/404.html:43
+msgid "Oops! Page not found."
+msgstr "Oops! Página não encontrada."
+
+#: templates/global/pages/404.html:45
+msgid "The page you are looking for could not be found."
+msgstr "A página que você está procurando não foi encontrada."
+
+#: templates/global/pages/404.html:48 templates/global/pages/500.html:48
+msgid "Back to home page"
+msgstr "Voltar para a página inicial"
+
+#: templates/global/pages/500.html:43
+msgid "Oops! Something went wrong."
+msgstr "Oops! Algo deu errado."
+
+#: templates/global/pages/500.html:45
+msgid "Something went wrong on the server. Please try again later."
+msgstr "Algo deu errado no servidor, tente novamente mais tarde!"
+
+#: templates/global/pages/base.html:29
+msgid "Portfolio"
+msgstr "Portfólio"
+
+#: templates/global/partials/footer.html:5
+msgid "Built by Paulo Benatto"
+msgstr "Desenvolvido por Paulo Benatto"
+
+#: templates/global/partials/footer.html:7
+msgid "Application built with"
+msgstr "Aplicação desenvolvida usando"
+
+#: templates/global/partials/footer.html:10
+msgid "Django"
+msgstr "Django"
+
+#: templates/global/partials/footer.html:17
+msgid "Bootstrap"
+msgstr "Bootstrap"
+
+#: templates/global/partials/header.html:42
+msgid "Theme"
+msgstr "Tema"
+
+#: templates/global/partials/header.html:49
+msgid "Light"
+msgstr "Claro"
+
+#: templates/global/partials/header.html:56
+msgid "Dark"
+msgstr "Escuro"
+
+#: templates/global/partials/header.html:63
+#: templates/global/partials/header.html:94
+msgid "Auto"
+msgstr "Auto"
+
+#: templates/global/partials/header.html:73
+msgid "Language"
+msgstr "Idioma"
+
+#: templates/global/partials/header.html:79
+msgid "Language: Auto"
+msgstr "Idioma: Auto"
+
+#: templates/global/partials/header.html:80
+msgid "Language: PT"
+msgstr "Idioma: PT"
+
+#: templates/global/partials/header.html:81
+msgid "Language: EN"
+msgstr "Idioma: EN"

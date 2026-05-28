@@ -3,6 +3,7 @@ import os
 import tagulous.models
 from django.db import models
 from django.utils.text import slugify
+from django.utils.translation import gettext as _
 from django.core.files.storage import FileSystemStorage
 
 from app.models.base import BaseStartDateEndDateModel
@@ -11,7 +12,7 @@ from app.models.topic import Topic
 
 class Project(BaseStartDateEndDateModel):
     title = models.CharField(max_length=100)
-    company = models.CharField(max_length=100, default="Projeto Pessoal")
+    company = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField()
     github_url = models.URLField(null=True, blank=True)
     # fetched_at = models.DateTimeField(null=True, blank=True)
@@ -20,6 +21,10 @@ class Project(BaseStartDateEndDateModel):
 
     def __str__(self):
         return self.title
+
+    @property
+    def company_display(self):
+        return self.company or _("Personal Project")
 
 
 class OverwriteStorage(FileSystemStorage):

@@ -107,6 +107,19 @@ wheels = [
 ]
 
 [[package]]
+name = "django-modeltranslation"
+version = "0.20.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d1/db/a0c18e3053c97176a195ee05891ad2e673c531eba612c8aa09b51333d634/django_modeltranslation-0.20.3.tar.gz", hash = "sha256:53f5e33927b99e184f3100c965c45f306f370b7086c6b34e35468800be0916ea", size = 82061 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c0/40/addb85c32031945ebed0545842fffbd9a5604fdc16bd684583e538137cbd/django_modeltranslation-0.20.3-py3-none-any.whl", hash = "sha256:0e1aaf77ce3dcf80c7ec67a6d67821635d07f4849c90363bc0afedb237b014f0", size = 98703 },
+]
+
+[[package]]
 name = "django-tagulous"
 version = "2.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -248,6 +261,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "django" },
+    { name = "django-modeltranslation" },
     { name = "django-tagulous" },
     { name = "gunicorn" },
     { name = "pillow" },
@@ -266,6 +280,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "django", specifier = ">=5.1.4" },
+    { name = "django-modeltranslation", specifier = ">=0.19.13" },
     { name = "django-tagulous", specifier = ">=2.1.0" },
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "pillow", specifier = ">=11.1.0" },

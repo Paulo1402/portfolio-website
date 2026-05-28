@@ -3,14 +3,15 @@ import io
 import requests
 import tagulous.admin
 from django.contrib import admin, messages
-from django.db.models.fields.files import ImageFieldFile
 from django.utils.html import format_html
 from django.shortcuts import get_object_or_404, redirect
 from django.conf import settings
 from django.urls import path
 from PIL import Image
+from modeltranslation.admin import TranslationAdmin
 
 from app.forms.base import BaseStartDateEndDateForm
+from app.admin.mixins import TaggedModelAdminCompat
 from app.models import ProjectImage, Project
 from app.utils.image import (
     convert_image_to_inmemoryfile,
@@ -30,7 +31,7 @@ class ProjectAdminForm(BaseStartDateEndDateForm):
         fields = "__all__"
 
 
-class ProjectAdmin(admin.ModelAdmin):
+class ProjectAdmin(TranslationAdmin, TaggedModelAdminCompat):
     form = ProjectAdminForm
     inlines = [ProjectImageInline]
     fieldsets = (

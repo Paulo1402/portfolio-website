@@ -1,20 +1,20 @@
-{% load static %}
+{% load static i18n %}
 
 <footer class="bg-primary-subtle py-5" data-bs-theme="dark">
     <div class="container text-white">
-        <p class="text-center">{% now "Y" %} - Desenvolvido por Paulo Benatto</p>
+        <p class="text-center">{% now "Y" %} - {% translate "Built by Paulo Benatto" %}</p>
 
-        <p class="text-center mt-3">Aplicação desenvolvida usando
+        <p class="text-center mt-3">{% translate "Application built with" %}
             <span class="text-muted">
                 <img src="{% static '/global/icon/django-logo.svg' %}" alt="Django logo"
-                     data-bs-toggle="tooltip" data-bs-title="Django"
+                     data-bs-toggle="tooltip" data-bs-title="{% translate "Django" %}"
                      style="width: 50px;"
                 />
             </span>
             e
             <span class="text-muted">
                 <img src="{% static '/global/icon/bootstrap-logo.svg' %}" alt="Bootstrap logo"
-                     data-bs-toggle="tooltip" data-bs-title="Bootstrap"
+                     data-bs-toggle="tooltip" data-bs-title="{% translate "Bootstrap" %}"
                      style="width: 25px;"
                 />
             </span>
@@ -23,7 +23,7 @@
         <div class="text-center justify-content-center d-flex flex-row gap-2 flex-wrap">
             <a href="https://www.linkedin.com/in/paulobenatto/"
                target="_blank" class="text-decoration-none">
-                Linkedin <i class="bi bi-linkedin"></i>
+                {% translate "LinkedIn" %} <i class="bi bi-linkedin"></i>
             </a>
             <a href="https://github.com/Paulo1402" target="_blank" class="text-decoration-none">
                 Github <i class="bi bi-github"></i>

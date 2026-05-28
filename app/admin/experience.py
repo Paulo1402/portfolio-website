@@ -1,6 +1,7 @@
 import tagulous.admin
-from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 
+from app.admin.mixins import TaggedModelAdminCompat
 from app.models import Experience
 from app.forms.base import BaseStartDateEndDateForm
 
@@ -11,7 +12,7 @@ class ExperienceAdminForm(BaseStartDateEndDateForm):
         fields = "__all__"
 
 
-class ExperienceAdmin(admin.ModelAdmin):
+class ExperienceAdmin(TranslationAdmin, TaggedModelAdminCompat):
     form = ExperienceAdminForm
     fieldsets = (
         ("Experience Information", {"fields": ("title", "company")}),

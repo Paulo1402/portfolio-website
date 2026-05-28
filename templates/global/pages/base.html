@@ -1,7 +1,8 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <!doctype html>
-<html lang="pt-br" class="h-100">
+<html lang="{{ LANGUAGE_CODE }}" class="h-100">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -25,9 +26,10 @@
     <link rel="shortcut icon" href="{% static '/global/icon/favicon.ico' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static '/global/css/style.css' %}">
 
-    <title>Paulo Benatto | Portfólio</title>
+    <title>Paulo Benatto | {% translate "Portfolio" %}</title>
 
     <script src="{% static 'global/js/theme-selector.js' %}"></script>
+    <script src="{% static 'global/js/language-selector.js' %}"></script>
 </head>
 
 <body class="d-flex flex-column h-100">

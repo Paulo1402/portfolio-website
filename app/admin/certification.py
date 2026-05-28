@@ -1,6 +1,7 @@
 import tagulous.admin
-from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 
+from app.admin.mixins import TaggedModelAdminCompat
 from app.models import Certification
 from app.forms.base import BaseStartDateEndDateForm
 
@@ -12,7 +13,7 @@ class CertificationAdminForm(BaseStartDateEndDateForm):
         exclude = ("created_at", "updated_at")
 
 
-class CertificationAdmin(admin.ModelAdmin):
+class CertificationAdmin(TranslationAdmin, TaggedModelAdminCompat):
     form = CertificationAdminForm
     fieldsets = (
         ("Certification Information", {"fields": ("title", "institution")}),
