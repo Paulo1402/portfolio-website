@@ -46,8 +46,10 @@ def experiences(request):
         responsibilities = []
         description = []
 
+        responsibility_headings = ("Responsabilidades", "Responsibilities")
+
         for line in experience.description.splitlines():
-            if line.startswith(_("Responsibilities")):
+            if line.startswith(responsibility_headings):
                 responsibility_block = True
             elif responsibility_block:
                 line = line.replace("•", "").strip()

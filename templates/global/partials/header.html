@@ -67,11 +67,11 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" role="button" id="bd-language"
-                           data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="nav-link dropdown-toggle" type="button" id="bd-language"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-translate"></i>
                             <span id="language-label" class="d-lg-none ms-2">Idioma</span>
-                        </a>
+                        </button>
                         <ul class="dropdown-menu" aria-labelledby="bd-language"
                             data-current-language="{{ LANGUAGE_CODE }}"
                             data-pt-url="{% switch_language_url 'pt-br' %}"
