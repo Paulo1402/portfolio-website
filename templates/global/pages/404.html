@@ -1,5 +1,7 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,12 +40,12 @@
 <body>
 <div class="error-container">
     <div class="error-code">404</div>
-    <h2>Oops! Página não encontrada.</h2>
+    <h2>{% translate "Oops! Page not found." %}</h2>
     <p class="error-message">
-        A página que você está procurando não foi encontrada.
+        {% translate "The page you are looking for could not be found." %}
     </p>
-    <a href="/" class="btn btn-primary">
-        Voltar para a página inicial
+    <a href="{% url 'home' %}" class="btn btn-primary">
+        {% translate "Back to home page" %}
     </a>
 </div>
 </body>

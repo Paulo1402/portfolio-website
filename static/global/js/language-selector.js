@@ -22,6 +22,11 @@ const getTargetUrl = (menu, language) => {
 const showActiveLanguage = (menu, selection, focus = false) => {
   const languageSwitcher = document.querySelector('#bd-language');
   if (!languageSwitcher) return;
+  const labelMap = {
+    auto: menu.dataset.labelAuto || 'Language: Auto',
+    'pt-br': menu.dataset.labelPt || 'Language: PT',
+    en: menu.dataset.labelEn || 'Language: EN',
+  };
 
   const items = menu.querySelectorAll('[data-language]');
   items.forEach((element) => {
@@ -33,7 +38,7 @@ const showActiveLanguage = (menu, selection, focus = false) => {
   if (target) {
     target.classList.add('active');
     target.setAttribute('aria-pressed', 'true');
-    languageSwitcher.setAttribute('aria-label', `Idioma (${selection})`);
+    languageSwitcher.setAttribute('aria-label', labelMap[selection] || selection);
   }
 
   if (focus) {
@@ -44,12 +49,17 @@ const showActiveLanguage = (menu, selection, focus = false) => {
 const updateLabel = (menu, selection) => {
   const label = document.getElementById('language-label');
   if (!label) return;
+  const labelMap = {
+    auto: menu.dataset.labelAuto || 'Language: Auto',
+    'pt-br': menu.dataset.labelPt || 'Language: PT',
+    en: menu.dataset.labelEn || 'Language: EN',
+  };
   if (selection === 'auto') {
-    label.textContent = 'Idioma: Auto';
+    label.textContent = labelMap.auto;
   } else if (selection === 'pt-br') {
-    label.textContent = 'Idioma: PT';
+    label.textContent = labelMap['pt-br'];
   } else {
-    label.textContent = 'Idioma: EN';
+    label.textContent = labelMap.en;
   }
 };
 

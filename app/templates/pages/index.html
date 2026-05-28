@@ -1,20 +1,20 @@
 {% extends 'global/pages/base.html' %}
-{% load static %}
+{% load static i18n %}
 
 {% block main %}
     <div class="container">
         {% if profile.picture %}
             <img src="{{ profile.picture.url }}"
-                 class="img-fluid rounded-circle mb-5" alt="Foto de perfil"
+                 class="img-fluid rounded-circle mb-5" alt="{% translate "Profile photo" %}"
                  style="width: 200px; height: 200px; margin: 0 auto; display: block;"
             />
         {% endif %}
 
         <blockquote class="blockquote text-center mb-5">
-            <p>Beautiful is better than ugly. Explicit is better than implicit. Simple is better than
-                complex. [...]
-            </p>
-            <footer class="blockquote-footer">Zen of Python</footer>
+            {% blocktrans %}
+                Beautiful is better than ugly. Explicit is better than implicit. Simple is better than complex. [...]
+            {% endblocktrans %}
+            <footer class="blockquote-footer">{% translate "Zen of Python" %}</footer>
         </blockquote>
 
         <p class="text-center">
@@ -23,7 +23,7 @@
     </div>
 
     <div>
-        <h2 class="text-center my-5">Habilidades</h2>
+        <h2 class="text-center my-5">{% translate "Skills" %}</h2>
 
         <div class="container">
             <div class="row g-4 row-cols-1 row-cols-sm-2 row-cols-md-3">

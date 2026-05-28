@@ -1,15 +1,18 @@
 {% extends 'global/pages/base.html' %}
+{% load i18n %}
 
 {% block main %}
     <script>
         function handleEmailClick(e) {
             const el = e.target
+            const copiedText = "{% translate "Email copied!" %}"
+            const copyLabel = "{% translate "Copy email" %} <i class='bi bi-clipboard'></i>"
 
             window.navigator.clipboard.writeText("{{ email }}");
-            el.innerText = "E-mail copiado!"
+            el.innerText = copiedText
 
             setTimeout(() => {
-                el.innerHTML = 'Copiar e-mail <i class="bi bi-clipboard"></i>'
+                el.innerHTML = copyLabel
             }, 1500)
         }
     </script>
@@ -19,12 +22,12 @@
             <div class="col">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">E-mail</h5>
+                        <h5 class="card-title">{% translate "Email" %}</h5>
                         <p class="card-text">{{ email }}</p>
                         <a role="button"
                            onclick="handleEmailClick(event)"
                            class="btn btn-primary"
-                           target="_blank">Copiar e-mail <i class="bi bi-clipboard"></i>
+                           target="_blank">{% translate "Copy email" %} <i class="bi bi-clipboard"></i>
                         </a>
                     </div>
                 </div>
@@ -33,11 +36,11 @@
             <div class="col">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">Linkedin</h5>
+                        <h5 class="card-title">{% translate "LinkedIn" %}</h5>
                         <p class="card-text">{{ linkedin.username }}</p>
                         <a href="{{ linkedin.url }}"
                            class="btn btn-primary"
-                           target="_blank">Acessar Linkedin <i class="bi bi-linkedin"></i>
+                           target="_blank">{% translate "Open LinkedIn" %} <i class="bi bi-linkedin"></i>
                         </a>
                     </div>
                 </div>
@@ -46,11 +49,11 @@
             <div class="col">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">GitHub</h5>
+                        <h5 class="card-title">{% translate "GitHub" %}</h5>
                         <p class="card-text">{{ github.username }}</p>
                         <a href="{{ github.url }}"
                            class="btn btn-primary"
-                           target="_blank">Acessar GitHub <i class="bi bi-github"></i>
+                           target="_blank">{% translate "Open GitHub" %} <i class="bi bi-github"></i>
                         </a>
                     </div>
                 </div>
@@ -58,7 +61,7 @@
         </div>
 
         <h3 class="mt-5 text-center">
-            Formulário de contato
+            {% translate "Contact form" %}
         </h3>
 
         {% if messages %}
@@ -73,21 +76,23 @@
             {% csrf_token %}
 
             <div class="mb-3">
-                <label for="name" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Seu nome" required/>
+                <label for="name" class="form-label">{% translate "Name" %}</label>
+                <input type="text" class="form-control" id="name" name="name"
+                       placeholder="{% translate "Your name" %}" required/>
             </div>
 
             <div class="mb-3">
-                <label for="email" class="form-label">E-mail</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Seu e-mail" required/>
+                <label for="email" class="form-label">{% translate "Email" %}</label>
+                <input type="email" class="form-control" id="email" name="email"
+                       placeholder="{% translate "Your email" %}" required/>
             </div>
             <div class="mb-3">
-                <label for="message" class="form-label">Mensagem</label>
-                <textarea class="form-control" id="message" name="message" rows="3" placeholder="Escreva sua mensagem"
-                          required></textarea>
+                <label for="message" class="form-label">{% translate "Message" %}</label>
+                <textarea class="form-control" id="message" name="message" rows="3"
+                          placeholder="{% translate "Write your message" %}" required></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary">Enviar</button>
+            <button type="submit" class="btn btn-primary">{% translate "Send" %}</button>
         </form>
     </div>
 {% endblock %}

@@ -12,22 +12,22 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Sobre mim</a>
+                        <a class="nav-link" href="{% url 'home' %}">{% translate "About" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'experiences' %}">Experiências</a>
+                        <a class="nav-link" href="{% url 'experiences' %}">{% translate "Experience" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'projects' %}">Projetos</a>
+                        <a class="nav-link" href="{% url 'projects' %}">{% translate "Projects" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'formation' %}">Formação</a>
+                        <a class="nav-link" href="{% url 'formation' %}">{% translate "Education" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'certifications' %}">Certificações</a>
+                        <a class="nav-link" href="{% url 'certifications' %}">{% translate "Certifications" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'contact' %}">Contato</a>
+                        <a class="nav-link" href="{% url 'contact' %}">{% translate "Contact" %}</a>
                     </li>
 
                     <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
@@ -39,28 +39,28 @@
                         <a class="nav-link dropdown-toggle" role="button" id="bd-theme"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             <i id="theme-icon"></i>
-                            <span id="bd-theme-text" class="d-lg-none ms-2">Escolher tema</span>
+                            <span id="bd-theme-text" class="d-lg-none ms-2">{% translate "Theme" %}</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="bd-theme">
                             <li>
                                 <a class="dropdown-item" role="button" id="theme-light" data-bs-theme-value="light">
                                     <i class="bi bi-brightness-alt-high-fill me-2"
                                        data-theme-icon="bi-brightness-alt-high-fill">
-                                    </i>Claro
+                                    </i>{% translate "Light" %}
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" role="button" id="theme-dark" data-bs-theme-value="dark">
                                     <i class="bi bi-moon-stars-fill me-2"
                                        data-theme-icon="bi-moon-stars-fill">
-                                    </i>Escuro
+                                    </i>{% translate "Dark" %}
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" role="button" id="theme-dark" data-bs-theme-value="auto">
                                     <i class="bi bi-circle-half me-2"
                                        data-theme-icon="bi-circle-half">
-                                    </i>Auto
+                                    </i>{% translate "Auto" %}
                                 </a>
                             </li>
                         </ul>
@@ -70,25 +70,28 @@
                         <button class="nav-link dropdown-toggle" type="button" id="bd-language"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-translate"></i>
-                            <span id="language-label" class="d-lg-none ms-2">Idioma</span>
+                            <span id="language-label" class="d-lg-none ms-2">{% translate "Language" %}</span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="bd-language"
                             data-current-language="{{ LANGUAGE_CODE }}"
                             data-pt-url="{% switch_language_url 'pt-br' %}"
-                            data-en-url="{% switch_language_url 'en' %}">
+                            data-en-url="{% switch_language_url 'en' %}"
+                            data-label-auto="{% translate "Language: Auto" %}"
+                            data-label-pt="{% translate "Language: PT" %}"
+                            data-label-en="{% translate "Language: EN" %}">
                             <li>
                                 <a class="dropdown-item" role="button" data-language="pt-br">
-                                    <i class="bi bi-flag me-2"></i>Português
+                                    <i class="bi bi-flag me-2"></i>{% translate "Portuguese" %}
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" role="button" data-language="en">
-                                    <i class="bi bi-flag-fill me-2"></i>English
+                                    <i class="bi bi-flag-fill me-2"></i>{% translate "English" %}
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" role="button" data-language="auto">
-                                    <i class="bi bi-magic me-2"></i>Auto
+                                    <i class="bi bi-magic me-2"></i>{% translate "Auto" %}
                                 </a>
                             </li>
                         </ul>

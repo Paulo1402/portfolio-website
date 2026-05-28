@@ -30,7 +30,7 @@ def index(request):
         request,
         "pages/index.html",
         {
-            "page_title": "Sobre mim",
+            "page_title": _("About"),
             "profile": profile,
             "skills_by_area": skills_by_area,
         },
@@ -67,7 +67,7 @@ def experiences(request):
     return render(
         request,
         "pages/experiences.html",
-        {"page_title": "Experiências", "experiences": experiences},
+        {"page_title": _("Experience"), "experiences": experiences},
     )
 
 
@@ -79,7 +79,7 @@ def projects(request):
     return render(
         request,
         "pages/projects.html",
-        {"page_title": "Projetos", "projects": projects},
+        {"page_title": _("Projects"), "projects": projects},
     )
 
 
@@ -90,7 +90,7 @@ def formation(request):
         request,
         "pages/formation.html",
         {
-            "page_title": "Formação",
+            "page_title": _("Education"),
             "formation": formation,
         },
     )
@@ -102,7 +102,7 @@ def certifications(request):
     return render(
         request,
         "pages/certifications.html",
-        {"page_title": "Certificações", "certifications": certifications},
+        {"page_title": _("Certifications"), "certifications": certifications},
     )
 
 
@@ -113,7 +113,7 @@ def contact(request):
         request,
         "pages/contact.html",
         {
-            "page_title": "Contato",
+            "page_title": _("Contact"),
             "email": profile.email,
             "linkedin": {
                 "url": profile.linkedin,

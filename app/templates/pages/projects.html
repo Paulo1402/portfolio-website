@@ -1,4 +1,5 @@
 {% extends 'global/pages/base.html' %}
+{% load i18n %}
 
 
 
@@ -35,15 +36,13 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ project.title }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">
-                        {% if project.company %}
-                            {{ project.company }} |
-                        {% endif %}
+                        {{ project.company_display }} |
                         <small class="text-muted">
                             {{ project.start_date | date:"F Y" }} -
                             {% if project.end_date %}
                                 {{ project.end_date | date:"F Y" }}
                             {% else %}
-                                Atual
+                                {% translate "Present" %}
                             {% endif %}
                         </small>
                     </h6>
@@ -79,13 +78,13 @@
                                         data-bs-target="#carousel-{{ project.id }}"
                                         data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Anterior</span>
+                                    <span class="visually-hidden">{% translate "Previous" %}</span>
                                 </button>
                                 <button class="carousel-control-next" type="button"
                                         data-bs-target="#carousel-{{ project.id }}"
                                         data-bs-slide="next">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Próxima</span>
+                                    <span class="visually-hidden">{% translate "Next" %}</span>
                                 </button>
                             </div>
                         {% else %}
@@ -96,7 +95,8 @@
                     {% endif %}
 
                     {% if project.github_url %}
-                        <a href="{{ project.github_url }}" target="_blank" class="btn btn-primary mt-3">Ver repositório
+                        <a href="{{ project.github_url }}" target="_blank" class="btn btn-primary mt-3">
+                            {% translate "View repository" %}
                             <i class="bi bi-github"></i>
                         </a>
                     {% endif %}
