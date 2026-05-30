@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    env:
+      DJANGO_SECRET_KEY: ci-secret-key
+      DJANGO_DEBUG: "true"
+      DJANGO_ENV: development
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      DJANGO_CSRF_TRUSTED_ORIGINS: http://localhost,http://127.0.0.1
+      GITHUB_TOKEN: ci-token
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: latest
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Run Ruff
+        run: uv run ruff check .
+
+      - name: Run Django checks
+        run: uv run python manage.py check
+
+      - name: Run Django tests
+        run: uv run python manage.py test
