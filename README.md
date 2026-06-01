@@ -31,6 +31,7 @@ O repositório usa GitHub Actions para:
 - `VPS_USER`: nome do usuário de deploy (ex: `deployer`)
 - `VPS_SSH_KEY`: chave privada SSH do usuário
 - `VPS_APP_DIR`: diretório da aplicação (ex: `/app`)
+- `VPS_KNOWN_HOSTS`: contents of your VPS known_hosts (see README for how to generate)
 
 ### Setup da VPS
 
@@ -54,9 +55,9 @@ O repositório usa GitHub Actions para:
    docker volume create portfolio_app_media_data
    ```
 
-4. **Copiar o `docker-compose.yml` e `.env`**:
+4. **Copiar o `docker-compose.yaml` e `.env`**:
    ```bash
-   # Copiar o docker-compose.yml do repositório para /app
+   # Copiar o docker-compose.yaml do repositório para /app
    # Criar .env em /app com as variáveis necessárias (baseado em .env.example)
    ```
 
@@ -75,7 +76,7 @@ O repositório usa GitHub Actions para:
 - O deploy assume que a VPS já tem o `docker compose` instalado e funcionando.
 - Para simplificar, publique a imagem como **public** no GHCR; se mantiver privada, a VPS precisará autenticar no
   registry.
-- O serviço do app no compose é esperado como `django`; não mude esse nome no `docker-compose.yml`.
+- O serviço do app no compose é esperado como `django`; não mude esse nome no `docker-compose.yaml`.
 - O compose da VPS compartilha os volumes `portfolio_app_static_data` e `portfolio_app_media_data` com o `nginx-proxy`.
 - O deploy roda `migrate` e `collectstatic` dentro do container do app após o `up -d`.
 - O `nginx-proxy` continua separado do app para facilitar manutenção e futuras migrações.
