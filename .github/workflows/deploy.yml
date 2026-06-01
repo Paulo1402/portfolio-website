@@ -70,17 +70,22 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
 
-      - name: Add known_hosts (from secret)
+      - name: Add known_hosts (from secret, strip comments)
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          # write known hosts, stripping leading comment lines (ssh-keyscan may include # metadata)
+          printf '%s\n' "${{ secrets.VPS_KNOWN_HOSTS }}" | sed '/^#/d' > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
+          # show known_hosts fingerprints for audit (non-fatal)
+          ssh-keygen -lf ~/.ssh/known_hosts || true
 
       - name: Deploy on VPS
         run: |
-          ssh -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o StrictHostKeyChecking=yes "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}" "bash -se" <<EOF
+          ssh -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o StrictHostKeyChecking=yes "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}" "bash -se" <<'EOF'
             set -euo pipefail
             cd "${{ vars.VPS_APP_DIR }}"
+            # ensure repository owner is lowercase for image namespace (overrides .env if present)
+            export GITHUB_REPOSITORY_OWNER="$(echo "${GITHUB_REPOSITORY_OWNER:-paulo1402}" | tr '[:upper:]' '[:lower:]')"
             docker compose pull
             docker compose up -d
             docker compose run --rm django python manage.py migrate --noinput
