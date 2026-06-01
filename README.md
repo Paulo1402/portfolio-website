@@ -25,13 +25,16 @@ O repositório usa GitHub Actions para:
 - buildar a imagem Docker e publicar no GHCR
 - acessar a VPS por SSH e atualizar o stack com `docker compose`
 
-### Secrets necessários no GitHub
+### Repository variables and secrets
 
-- `VPS_HOST`: IP ou domínio da VPS
-- `VPS_USER`: nome do usuário de deploy (ex: `deployer`)
-- `VPS_SSH_KEY`: chave privada SSH do usuário
-- `VPS_APP_DIR`: diretório da aplicação (ex: `/app`)
-- `VPS_KNOWN_HOSTS`: contents of your VPS known_hosts (see README for how to generate)
+- Repository variables (set in GitHub Settings → Variables):
+  - `VPS_HOST`: IP ou domínio da VPS
+  - `VPS_USER`: nome do usuário de deploy (ex: `deployer`)
+  - `VPS_APP_DIR`: diretório da aplicação (ex: `/app`)
+
+- Secrets (set in GitHub Settings → Secrets):
+  - `VPS_SSH_KEY`: chave privada SSH do usuário (keep secret)
+  - `VPS_KNOWN_HOSTS`: contents of your VPS known_hosts (see README for how to generate)
 
 ### Setup da VPS
 

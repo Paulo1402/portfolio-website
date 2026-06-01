@@ -78,9 +78,9 @@ jobs:
 
       - name: Deploy on VPS
         run: |
-          ssh -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o StrictHostKeyChecking=yes "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "bash -se" <<EOF
+          ssh -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o StrictHostKeyChecking=yes "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}" "bash -se" <<EOF
             set -euo pipefail
-            cd "${{ secrets.VPS_APP_DIR }}"
+            cd "${{ vars.VPS_APP_DIR }}"
             docker compose pull
             docker compose up -d
             docker compose run --rm django python manage.py migrate --noinput
