@@ -16,7 +16,7 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/portfolio-website
+  IMAGE_NAME: ${{ toLower(github.repository_owner) }}/portfolio-website
 
 jobs:
   build-and-push:
