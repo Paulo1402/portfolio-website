@@ -1,26 +1,43 @@
 services:
   django:
-    build: .
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER:-Paulo1402}/portfolio-website:latest
     container_name: django_portfolio_app
+    restart: unless-stopped
     expose:
       - "8000"
+    env_file:
+      - .env
     volumes:
       - portfolio_app_static_data:/app/staticfiles
       - portfolio_app_media_data:/app/media
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - django_db
       - proxy_network
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/')" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
   db:
     image: postgres:17-alpine
     container_name: postgres_portfolio_app
+    restart: unless-stopped
     env_file:
       - .env
     networks:
       - django_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   django_db:
