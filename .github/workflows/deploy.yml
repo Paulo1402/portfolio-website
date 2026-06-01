@@ -16,7 +16,7 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/portfolio-website
+  IMAGE_NAME: ${{ toLower(github.repository_owner) }}/portfolio-website
 
 jobs:
   build-and-push:
@@ -70,19 +70,26 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
 
-      - name: Add known_hosts (from secret)
+      - name: Add known_hosts (from secret, strip comments)
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          # write known hosts, stripping leading comment lines (ssh-keyscan may include # metadata)
+          printf '%s\n' "${{ secrets.VPS_KNOWN_HOSTS }}" | sed '/^#/d' > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
+          # show known_hosts fingerprints for audit (non-fatal)
+          ssh-keygen -lf ~/.ssh/known_hosts || true
 
-      - name: Deploy on VPS
+      - name: Deploy on VPS (pull SHA-tagged image)
         run: |
+          # create a minimal env file on the remote that pins the image tag and owner for compose
           ssh -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o StrictHostKeyChecking=yes "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}" "bash -se" <<EOF
             set -euo pipefail
             cd "${{ vars.VPS_APP_DIR }}"
-            docker compose pull
-            docker compose up -d
+            printf 'IMAGE_TAG=%s\nGITHUB_REPOSITORY_OWNER=%s\n' "${{ github.sha }}" "${{ toLower(github.repository_owner) }}" > .env.cicd
+            chmod 600 .env.cicd || true
+            # use the env-file so docker compose will substitute the IMAGE_TAG and owner into image references
+            docker compose --env-file .env.cicd pull
+            docker compose --env-file .env.cicd up -d
             docker compose run --rm django python manage.py migrate --noinput
             docker compose run --rm django python manage.py compilemessages
             docker compose run --rm django python manage.py collectstatic --noinput
