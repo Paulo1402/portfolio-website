@@ -35,6 +35,7 @@ O repositório usa GitHub Actions para:
 - Secrets (set in GitHub Settings → Secrets):
   - `VPS_SSH_KEY`: chave privada SSH do usuário (keep secret)
   - `VPS_KNOWN_HOSTS`: contents of your VPS known_hosts (see README for how to generate)
+  - Cole o arquivo known_hosts com linhas reais (não use `\n` como texto literal).
 
 ### Setup da VPS
 
