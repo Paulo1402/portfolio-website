@@ -16,7 +16,7 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ toLower(github.repository_owner) }}/portfolio-website
+  IMAGE_REPO: portfolio-website
 
 jobs:
   build-and-push:
@@ -25,6 +25,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set image name
+        run: |
+          OWNER="${GITHUB_REPOSITORY%%/*}"
+          echo "IMAGE_NAME=${OWNER,,}/${{ env.IMAGE_REPO }}" >> "$GITHUB_ENV"
 
       - name: Install uv
         uses: astral-sh/setup-uv@v3
@@ -65,6 +70,11 @@ jobs:
       name: production
 
     steps:
+      - name: Set image owner
+        run: |
+          OWNER="${GITHUB_REPOSITORY%%/*}"
+          echo "IMAGE_OWNER=${OWNER,,}" >> "$GITHUB_ENV"
+
       - name: Start SSH agent
         uses: webfactory/ssh-agent@v0.9.0
         with:
@@ -85,7 +95,7 @@ jobs:
           ssh -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o StrictHostKeyChecking=yes "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}" "bash -se" <<EOF
             set -euo pipefail
             cd "${{ vars.VPS_APP_DIR }}"
-            printf 'IMAGE_TAG=%s\nGITHUB_REPOSITORY_OWNER=%s\n' "${{ github.sha }}" "${{ toLower(github.repository_owner) }}" > .env.cicd
+            printf 'IMAGE_TAG=%s\nGITHUB_REPOSITORY_OWNER=%s\n' "${{ github.sha }}" "${{ env.IMAGE_OWNER }}" > .env.cicd
             chmod 600 .env.cicd || true
             # use the env-file so docker compose will substitute the IMAGE_TAG and owner into image references
             docker compose --env-file .env.cicd pull
