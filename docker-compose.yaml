@@ -1,6 +1,6 @@
 services:
   django:
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER:-paulo1402}/portfolio-website:latest
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER:-paulo1402}/portfolio-website:${IMAGE_TAG:-latest}
     container_name: django_portfolio_app
     restart: unless-stopped
     expose:
