@@ -1,9 +1,12 @@
 import sys
 
+from django.db import DatabaseError, connection
 from django.db.models import Value
 from django.db.models.functions import Coalesce
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.views.decorators.http import require_GET
 from django.utils.translation import gettext as _
 
 from .models import Profile, Skill, Experience, Project, Formation, Certification
@@ -138,6 +141,18 @@ def contact_message(request):
     messages.success(request, _("Message sent successfully!"))
 
     return redirect("contact")
+
+
+@require_GET
+def health(request):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+    except DatabaseError:
+        return JsonResponse({"status": "error", "database": "unavailable"}, status=503)
+
+    return JsonResponse({"status": "ok", "database": "available"})
 
 
 def handler_404(request, *args, **kwargs):
