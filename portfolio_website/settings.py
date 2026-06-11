@@ -19,21 +19,77 @@ from django.utils.translation import gettext_lazy as _
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+DJANGO_ENV = decouple.config("DJANGO_ENV", default="development").strip().lower()
+IS_PRODUCTION = DJANGO_ENV == "production"
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = decouple.config("DJANGO_SECRET_KEY")
+SECRET_KEY = decouple.config(
+    "DJANGO_SECRET_KEY",
+    default=None if IS_PRODUCTION else "unsafe-development-secret-key",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = decouple.config("DJANGO_DEBUG", default=True, cast=bool)
+DEBUG = decouple.config("DJANGO_DEBUG", default=not IS_PRODUCTION, cast=bool)
 
-ALLOWED_HOSTS = decouple.config("DJANGO_ALLOWED_HOSTS", cast=decouple.Csv())
+ALLOWED_HOSTS = decouple.config(
+    "DJANGO_ALLOWED_HOSTS",
+    default=None if IS_PRODUCTION else "localhost,127.0.0.1,testserver",
+    cast=decouple.Csv(),
+)
 
 CSRF_TRUSTED_ORIGINS = decouple.config(
-    "DJANGO_CSRF_TRUSTED_ORIGINS", cast=decouple.Csv()
+    "DJANGO_CSRF_TRUSTED_ORIGINS",
+    default=None if IS_PRODUCTION else "http://localhost,http://127.0.0.1",
+    cast=decouple.Csv(),
 )
+
+LOG_LEVEL = decouple.config("DJANGO_LOG_LEVEL", default="INFO").upper()
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "default": {
+            "format": "%(levelname)s %(asctime)s %(name)s %(message)s",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "default",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+        },
+        "django.request": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "app": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
+    },
+}
+
+if IS_PRODUCTION:
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    X_FRAME_OPTIONS = "DENY"
 
 
 # Application definition
@@ -93,7 +149,7 @@ WSGI_APPLICATION = "portfolio_website.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # Database configuration
-if decouple.config("DJANGO_ENV") == "production":
+if IS_PRODUCTION:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -104,7 +160,6 @@ if decouple.config("DJANGO_ENV") == "production":
             "PORT": decouple.config("POSTGRES_PORT", "5432"),
         }
     }
-    print("🎲 Starting Django on PostgreSQL")
 else:
     DATABASES = {
         "default": {
@@ -112,7 +167,6 @@ else:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-    print("🎲 Starting Django on SQLite")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -170,4 +224,4 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Project variables
-GITHUB_TOKEN = decouple.config("GITHUB_TOKEN")
+GITHUB_TOKEN = decouple.config("GITHUB_TOKEN", default="")
