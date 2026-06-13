@@ -5,10 +5,11 @@
     <script>
         function handleEmailClick(e) {
             const el = e.target
+            const email = el.dataset.email
             const copiedText = "{% translate "Email copied!" %}"
             const copyLabel = "{% translate "Copy email" %} <i class='bi bi-clipboard'></i>"
 
-            window.navigator.clipboard.writeText("{{ email }}");
+            window.navigator.clipboard.writeText(email);
             el.innerText = copiedText
 
             setTimeout(() => {
@@ -18,78 +19,84 @@
     </script>
 
     <div class="container">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">{% translate "Email" %}</h5>
-                        <p class="card-text">{{ email }}</p>
-                        <a role="button"
-                           onclick="handleEmailClick(event)"
-                           class="btn btn-primary"
-                           target="_blank">{% translate "Copy email" %} <i class="bi bi-clipboard"></i>
-                        </a>
+        {% if email or linkedin.url or github.url %}
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                {% if email %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{% translate "Email" %}</h5>
+                                <p class="card-text">{{ email }}</p>
+                                <a role="button"
+                                   data-email="{{ email }}"
+                                   onclick="handleEmailClick(event)"
+                                   class="btn btn-primary">{% translate "Copy email" %} <i class="bi bi-clipboard"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                {% endif %}
 
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">{% translate "LinkedIn" %}</h5>
-                        <p class="card-text">{{ linkedin.username }}</p>
-                        <a href="{{ linkedin.url }}"
-                           class="btn btn-primary"
-                           target="_blank">{% translate "Open LinkedIn" %} <i class="bi bi-linkedin"></i>
-                        </a>
+                {% if linkedin.url %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{% translate "LinkedIn" %}</h5>
+                                <p class="card-text">{{ linkedin.username }}</p>
+                                <a href="{{ linkedin.url }}"
+                                   class="btn btn-primary"
+                                   target="_blank">{% translate "Open LinkedIn" %} <i class="bi bi-linkedin"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                {% endif %}
 
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">{% translate "GitHub" %}</h5>
-                        <p class="card-text">{{ github.username }}</p>
-                        <a href="{{ github.url }}"
-                           class="btn btn-primary"
-                           target="_blank">{% translate "Open GitHub" %} <i class="bi bi-github"></i>
-                        </a>
+                {% if github.url %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{% translate "GitHub" %}</h5>
+                                <p class="card-text">{{ github.username }}</p>
+                                <a href="{{ github.url }}"
+                                   class="btn btn-primary"
+                                   target="_blank">{% translate "Open GitHub" %} <i class="bi bi-github"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
-        </div>
+        {% endif %}
 
         <h3 class="mt-5 text-center">
             {% translate "Contact form" %}
         </h3>
 
         {% if messages %}
-            <div class="alert alert-success mt-3" role="alert">
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            </div>
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:"info" }} mt-3" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
         {% endif %}
 
         <form action="{% url 'contact_message' %}" method="POST">
             {% csrf_token %}
 
             <div class="mb-3">
-                <label for="name" class="form-label">{% translate "Name" %}</label>
-                <input type="text" class="form-control" id="name" name="name"
-                       placeholder="{% translate "Your name" %}" required/>
+                <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+                {{ form.name }}
             </div>
 
             <div class="mb-3">
-                <label for="email" class="form-label">{% translate "Email" %}</label>
-                <input type="email" class="form-control" id="email" name="email"
-                       placeholder="{% translate "Your email" %}" required/>
+                <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                {{ form.email }}
             </div>
+
             <div class="mb-3">
-                <label for="message" class="form-label">{% translate "Message" %}</label>
-                <textarea class="form-control" id="message" name="message" rows="3"
-                          placeholder="{% translate "Write your message" %}" required></textarea>
+                <label for="{{ form.message.id_for_label }}" class="form-label">{{ form.message.label }}</label>
+                {{ form.message }}
             </div>
 
             <button type="submit" class="btn btn-primary">{% translate "Send" %}</button>

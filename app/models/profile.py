@@ -1,4 +1,6 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from app.models.base import BaseModel
 
@@ -15,6 +17,16 @@ class Profile(BaseModel):
 
     def __str__(self):
         return "Profile"
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def clean(self):
+        super().clean()
+
+        if Profile.objects.exclude(pk=self.pk).exists():
+            raise ValidationError(_("Only one profile can exist."))
 
     @property
     def linkedin_username(self):

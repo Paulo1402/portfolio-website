@@ -1,15 +1,22 @@
 import sys
+import logging
 
+from django.conf import settings
+from django.core.mail import EmailMessage
 from django.db import DatabaseError, connection
 from django.db.models import Value
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 from django.utils.translation import gettext as _
 
+from .forms import ContactForm
 from .models import Profile, Skill, Experience, Project, Formation, Certification
+
+
+logger = logging.getLogger(__name__)
 
 
 def index(request):
@@ -117,26 +124,61 @@ def contact(request):
         "pages/contact.html",
         {
             "page_title": _("Contact"),
-            "email": profile.email,
+            "profile": profile,
+            "form": ContactForm(),
+            "email": profile.email if profile else "",
             "linkedin": {
-                "url": profile.linkedin,
-                "username": profile.linkedin_username,
+                "url": profile.linkedin if profile else "",
+                "username": profile.linkedin_username if profile else "",
             },
             "github": {
-                "url": profile.github,
-                "username": profile.github_username,
+                "url": profile.github if profile else "",
+                "username": profile.github_username if profile else "",
             },
         },
     )
 
 
+@require_POST
 def contact_message(request):
-    name = request.POST.get("name", "").strip()
-    email = request.POST.get("email", "").strip()
-    message = request.POST.get("message", "").strip()
+    form = ContactForm(request.POST)
 
-    # TODO: handle message sent via contact form
-    print(name, email, message)
+    if not form.is_valid():
+        messages.error(request, _("Please correct the contact form errors."))
+        return redirect("contact")
+
+    profile = Profile.objects.first()
+    recipient = settings.CONTACT_EMAIL or (profile.email if profile else "")
+
+    if not recipient:
+        messages.error(request, _("Contact email is not configured."))
+        return redirect("contact")
+
+    name = form.cleaned_data["name"]
+    email = form.cleaned_data["email"]
+    message = form.cleaned_data["message"]
+
+    contact_email = EmailMessage(
+        subject=_("Portfolio contact from %(name)s") % {"name": name},
+        body=_("Name: %(name)s\nEmail: %(email)s\n\n%(message)s")
+        % {
+            "name": name,
+            "email": email,
+            "message": message,
+        },
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[recipient],
+        reply_to=[email],
+    )
+
+    try:
+        contact_email.send(fail_silently=False)
+    except Exception as e:
+        logger.exception("Failed to send contact email", exc_info=e)
+        messages.error(
+            request, _("Could not send your message. Please try again later.")
+        )
+        return redirect("contact")
 
     messages.success(request, _("Message sent successfully!"))
 
