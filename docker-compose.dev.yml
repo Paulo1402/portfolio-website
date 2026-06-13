@@ -1,27 +1,31 @@
 services:
   django:
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER:-paulo1402}/portfolio-website:${IMAGE_TAG:-latest}
+    build: .
     container_name: django_portfolio_app
     restart: unless-stopped
-    expose:
-      - "8000"
+    ports:
+      - "8000:8000"
     env_file:
       - .env
+    environment:
+      USE_POSTGRES: "true"
     volumes:
-      - portfolio_app_static_data:/app/staticfiles
-      - portfolio_app_media_data:/app/media
+      - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
     depends_on:
       db:
         condition: service_healthy
     networks:
       - django_db
-      - proxy_network
     healthcheck:
-      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/')" ]
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/')" ]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
 
   db:
     image: postgres:17-alpine
@@ -34,7 +38,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER}" ]
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -43,14 +47,5 @@ networks:
   django_db:
     driver: bridge
 
-  proxy_network:
-    external: true
-
 volumes:
   postgres_data:
-
-  portfolio_app_static_data:
-    external: true
-
-  portfolio_app_media_data:
-    external: true
