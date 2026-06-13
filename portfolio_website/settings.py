@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 
 import decouple
+from django.contrib.messages import constants as message_constants
 from django.utils.translation import gettext_lazy as _
 
 
@@ -124,6 +125,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+MESSAGE_TAGS = {
+    message_constants.ERROR: "danger",
+}
+
 ROOT_URLCONF = "portfolio_website.urls"
 
 TEMPLATES = [
@@ -225,3 +230,21 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Project variables
 GITHUB_TOKEN = decouple.config("GITHUB_TOKEN", default="")
+
+# Email
+EMAIL_BACKEND = decouple.config(
+    "EMAIL_BACKEND",
+    default="django.core.mail.backends.console.EmailBackend",
+)
+EMAIL_HOST = decouple.config("EMAIL_HOST", default="localhost")
+EMAIL_PORT = decouple.config("EMAIL_PORT", default=1025, cast=int)
+EMAIL_HOST_USER = decouple.config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = decouple.config("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = decouple.config("EMAIL_USE_TLS", default=False, cast=bool)
+EMAIL_USE_SSL = decouple.config("EMAIL_USE_SSL", default=False, cast=bool)
+EMAIL_TIMEOUT = decouple.config("EMAIL_TIMEOUT", default=30, cast=int)
+DEFAULT_FROM_EMAIL = decouple.config(
+    "DEFAULT_FROM_EMAIL",
+    default="Portfolio Website <noreply@localhost>",
+)
+CONTACT_EMAIL = decouple.config("CONTACT_EMAIL", default="")

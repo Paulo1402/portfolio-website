@@ -3,7 +3,7 @@
 
 {% block main %}
     <div class="container">
-        {% if profile.picture %}
+        {% if profile and profile.picture %}
             <img src="{{ profile.picture.url }}"
                  class="img-fluid rounded-circle mb-5" alt="{% translate "Profile photo" %}"
                  style="width: 200px; height: 200px; margin: 0 auto; display: block;"
@@ -15,9 +15,11 @@
             <footer class="blockquote-footer">Zen of Python</footer>
         </blockquote>
 
-        <p class="text-center">
-            {{ profile.description | linebreaksbr }}
-        </p>
+        {% if profile %}
+            <p class="text-center">
+                {{ profile.description | linebreaksbr }}
+            </p>
+        {% endif %}
     </div>
 
     <div>
