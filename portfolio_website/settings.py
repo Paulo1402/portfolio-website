@@ -22,6 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DJANGO_ENV = decouple.config("DJANGO_ENV", default="development").strip().lower()
 IS_PRODUCTION = DJANGO_ENV == "production"
+USE_POSTGRES = decouple.config("USE_POSTGRES", default=False, cast=bool)
 
 
 # Quick-start development settings - unsuitable for production
@@ -84,6 +85,9 @@ LOGGING = {
 
 if IS_PRODUCTION:
     SECURE_SSL_REDIRECT = True
+    SECURE_REDIRECT_EXEMPT = [
+        r"^health/$",
+    ]
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
@@ -154,7 +158,7 @@ WSGI_APPLICATION = "portfolio_website.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # Database configuration
-if IS_PRODUCTION:
+if IS_PRODUCTION or USE_POSTGRES:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",

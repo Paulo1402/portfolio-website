@@ -1,1 +1,13 @@
+.env
+.git
+.idea
+.local
+.pytest_cache
+.ruff_cache
 .venv
+__pycache__
+*.py[oc]
+*.mo
+db.sqlite3
+media
+staticfiles
