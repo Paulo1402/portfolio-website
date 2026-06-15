@@ -12,8 +12,10 @@ wheels/
 # Project-generated files
 .env
 db.sqlite3
+*.mo
 /staticfiles
 /media
 
 # Local settings
-.local.idea/
+.local/
+.idea/

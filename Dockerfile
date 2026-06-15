@@ -4,8 +4,8 @@ FROM ghcr.io/astral-sh/uv:python3.10-alpine
 # Set the timezone to São Paulo
 ENV TZ=America/Sao_Paulo
 
-# Install tzdata for timezone configuration
-RUN apk add --no-cache tzdata
+# Install runtime tools for timezone configuration and translation compilation
+RUN apk add --no-cache tzdata gettext
 
 # Set the timezone to São Paulo
 RUN cp /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime \
