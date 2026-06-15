@@ -1,6 +1,6 @@
 from django import forms
 
-from .widgets import MonthYearWidget, MonthYearField
+from .widgets import MonthYearField, MonthYearWidget
 
 
 class BaseStartDateEndDateForm(forms.ModelForm):

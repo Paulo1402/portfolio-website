@@ -1,10 +1,10 @@
 import os
 
 import tagulous.models
+from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
-from django.core.files.storage import FileSystemStorage
 
 from app.models.base import BaseStartDateEndDateModel
 from app.models.topic import Topic

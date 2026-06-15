@@ -5,7 +5,6 @@ from django.urls import reverse
 
 from app.models import Profile
 
-
 CONTACT_FORM_DATA = {
     "name": "Ada Lovelace",
     "email": "ada@example.com",

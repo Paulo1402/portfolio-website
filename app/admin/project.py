@@ -2,21 +2,21 @@ import logging
 
 import tagulous.admin
 from django.contrib import admin, messages
-from django.utils.html import format_html
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import path
-from PIL import Image
+from django.utils.html import format_html
 from modeltranslation.admin import TranslationAdmin
+from PIL import Image
 
-from app.forms.base import BaseStartDateEndDateForm
 from app.admin.mixins import TaggedModelAdminCompat
-from app.models import ProjectImage, Project
+from app.forms.base import BaseStartDateEndDateForm
+from app.models import Project, ProjectImage
+from app.utils.github import GitHubImportError, import_project_from_github
 from app.utils.image import (
     convert_image_to_inmemoryfile,
-    resize_and_pad_image,
     get_max_image_dimensions,
+    resize_and_pad_image,
 )
-from app.utils.github import GitHubImportError, import_project_from_github
 
 logger = logging.getLogger(__name__)
 
