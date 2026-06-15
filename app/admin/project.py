@@ -1,11 +1,9 @@
-import io
+import logging
 
-import requests
 import tagulous.admin
 from django.contrib import admin, messages
 from django.utils.html import format_html
 from django.shortcuts import get_object_or_404, redirect
-from django.conf import settings
 from django.urls import path
 from PIL import Image
 from modeltranslation.admin import TranslationAdmin
@@ -18,6 +16,9 @@ from app.utils.image import (
     resize_and_pad_image,
     get_max_image_dimensions,
 )
+from app.utils.github import GitHubImportError, import_project_from_github
+
+logger = logging.getLogger(__name__)
 
 
 class ProjectImageInline(admin.TabularInline):
@@ -71,55 +72,31 @@ class ProjectAdmin(TranslationAdmin, TaggedModelAdminCompat):
 
     def fetch_github(self, request, object_id):
         project = get_object_or_404(Project, id=object_id)
-        project_name = project.github_url.replace("https://github.com/", "")
-
-        response = requests.get(
-            f"https://api.github.com/repos/{project_name}",
-            headers={"Authorization": f"Bearer {settings.GITHUB_TOKEN}"},
-        )
 
         try:
-            response.raise_for_status()
-            response_json = response.json()
-
-            topics = response_json["topics"]
-            old_topics = project.topics.all()
-
-            project.topics = [*old_topics, *topics]
-
-            images = self.fetch_project_images(project_name)
-            width, height = get_max_image_dimensions([image[0] for image in images])
-
-            for image, name in images:
-                resized_image = resize_and_pad_image(image, width, height)
-                inmemory_image = convert_image_to_inmemoryfile(
-                    resized_image, name, image_format=image.format
-                )
-                project_image = project.project_images.filter(
-                    image__endswith=name
-                ).first()
-
-                # update the image if it exists
-                if project_image:
-                    project_image.image = inmemory_image
-                else:
-                    project.project_images.create(image=inmemory_image)
-
-            project.save()
-
+            result = import_project_from_github(project)
+        except GitHubImportError as error:
             self.message_user(
                 request,
-                "Github data and images updated!",
-                level=messages.SUCCESS,
-            )
-        except Exception as e:
-            print("Failed to fetch Github data!", e)
-
-            self.message_user(
-                request,
-                "Failed to fetch Github data!",
+                str(error),
                 level=messages.ERROR,
             )
+        except Exception:
+            logger.exception("Failed to fetch GitHub data for project %s", project.id)
+            self.message_user(
+                request,
+                "Failed to fetch GitHub data.",
+                level=messages.ERROR,
+            )
+        else:
+            if result.images_count:
+                message = "GitHub data and images updated."
+                level = messages.SUCCESS
+            else:
+                message = "GitHub data updated. No supported images found."
+                level = messages.WARNING
+
+            self.message_user(request, message, level=level)
 
         return redirect("/admin/app/project/")
 
@@ -149,40 +126,6 @@ class ProjectAdmin(TranslationAdmin, TaggedModelAdminCompat):
 
             product_image.image = inmemory_image
             product_image.save()
-
-    @staticmethod
-    def fetch_project_images(project: str):
-        project_images = []
-        extensions_available = [".png", ".jpg", ".jpeg"]
-
-        response = requests.get(
-            f"https://api.github.com/repos/{project}/contents/.github",
-            headers={"Authorization": f"Bearer {settings.GITHUB_TOKEN}"},
-        )
-
-        response.raise_for_status()
-        response_json = response.json()
-
-        for content in response_json:
-            content_name = content["name"]
-            is_image = any(
-                [content_name.endswith(extension) for extension in extensions_available]
-            )
-
-            if is_image:
-                img_url = content["download_url"]
-                response = requests.get(
-                    img_url,
-                    headers={"Authorization": f"Bearer {settings.GITHUB_TOKEN}"},
-                )
-
-                if response.status_code == 200:
-                    data = response.content
-                    image = Image.open(io.BytesIO(data))
-
-                    project_images.append((image, content_name))
-
-        return project_images
 
 
 tagulous.admin.register(Project, ProjectAdmin)
