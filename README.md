@@ -25,6 +25,26 @@ O repositório usa GitHub Actions para:
 - buildar a imagem Docker e publicar no GHCR
 - acessar a VPS por SSH e atualizar o stack com `docker compose`
 
+## Docker Compose
+
+O projeto usa arquivos Compose separados por ambiente:
+
+- `docker-compose.dev.yml`: ambiente local com build da imagem, PostgreSQL e servidor de desenvolvimento do Django.
+- `docker-compose.prod.yml`: template versionado do ambiente de produção, copiado para a VPS como `docker-compose.yml`.
+
+Para subir o ambiente local:
+
+```bash
+docker compose -f docker-compose.dev.yml up -d --build
+```
+
+O serviço `django` do compose local roda as migrações e inicia `python manage.py runserver 0.0.0.0:8000`.
+Depois de subir, acesse `http://localhost:8000/`.
+
+O deploy de produção não copia o código da aplicação para a VPS. A pipeline publica a imagem no GHCR, copia
+`docker-compose.prod.yml` para a VPS como `docker-compose.yml`, copia `scripts/deploy-app.sh` como `deploy-app.sh`,
+e executa o script remoto para atualizar o stack.
+
 ### Repository variables and secrets
 
 - Repository variables (set in GitHub Settings → Variables):
@@ -58,20 +78,17 @@ O repositório usa GitHub Actions para:
    docker volume create portfolio_app_media_data
    ```
 
-4. **Copiar o `docker-compose.yaml` e `.env`**:
+4. **Criar `.env` na VPS**:
    ```bash
-   # Copiar o docker-compose.yaml do repositório para /app
    # Criar .env em /app com as variáveis necessárias (baseado em .env.example)
    ```
 
-5. **Fazer pull inicial e subir os serviços**:
+5. **Fazer deploy inicial manual, se necessário**:
    ```bash
    cd /app
-   docker compose pull
-   docker compose up -d
-   docker compose run --rm django python manage.py migrate --noinput
-   docker compose run --rm django python manage.py compilemessages
-   docker compose run --rm django python manage.py collectstatic --noinput
+   # A pipeline cria/atualiza docker-compose.yml, deploy-app.sh e .env.cicd.
+   # Após esses arquivos existirem na VPS:
+   ./deploy-app.sh
    ```
 
 ### Observações
@@ -79,7 +96,8 @@ O repositório usa GitHub Actions para:
 - O deploy assume que a VPS já tem o `docker compose` instalado e funcionando.
 - Para simplificar, publique a imagem como **public** no GHCR; se mantiver privada, a VPS precisará autenticar no
   registry.
-- O serviço do app no compose é esperado como `django`; não mude esse nome no `docker-compose.yaml`.
+- O serviço do app no compose é esperado como `django`; não mude esse nome no `docker-compose.prod.yml`.
+- Na VPS, o arquivo de produção versionado é publicado como `docker-compose.yml`.
 - O compose da VPS compartilha os volumes `portfolio_app_static_data` e `portfolio_app_media_data` com o `nginx-proxy`.
 - O deploy roda `migrate` e `collectstatic` dentro do container do app após o `up -d`.
 - O `nginx-proxy` continua separado do app para facilitar manutenção e futuras migrações.
