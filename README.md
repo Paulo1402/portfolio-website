@@ -1,11 +1,10 @@
-# ❤️ Portfolio App
+# Portfolio App
 
-Este é um aplicativo de portfólio que exibe informações sobre mim e meus projetos.
+This is a Django portfolio application that displays information about me and my projects.
 
-O aplicativo foi desenvolvido em
-Python com o framework Django utilizando seu sistema de templates com Boostrap na estilização do frontend.
+The application is built with Python, Django templates, and Bootstrap for frontend styling.
 
-## 🚀 Tecnologias
+## Technologies
 
 - Python
 - Django
@@ -18,47 +17,50 @@ Python com o framework Django utilizando seu sistema de templates com Boostrap n
 
 ## CI/CD
 
-O repositório usa GitHub Actions para:
+The repository uses GitHub Actions to:
 
-- validar o código com Ruff e `manage.py check`
-- rodar os testes do Django
-- buildar a imagem Docker e publicar no GHCR
-- acessar a VPS por SSH e atualizar o stack com `docker compose`
+- validate code with Ruff and `manage.py check`
+- run the Django test suite
+- build the Docker image and publish it to GHCR
+- access the VPS over SSH and update the Docker Compose stack
 
 ## Docker Compose
 
-O projeto usa arquivos Compose separados por ambiente:
+The project uses separate Compose files per environment:
 
-- `docker-compose.dev.yml`: ambiente local com build da imagem, PostgreSQL e servidor de desenvolvimento do Django.
-- `docker-compose.prod.yml`: template versionado do ambiente de produção, copiado para a VPS como `docker-compose.yml`.
+- `docker-compose.dev.yml`: local development stack with a locally built image, PostgreSQL, and Django's development server.
+- `docker-compose.prod.yml`: versioned production template copied to the VPS as `docker-compose.yml`.
 
-Para subir o ambiente local:
+Start the local development stack with:
 
 ```bash
 docker compose -f docker-compose.dev.yml up -d --build
 ```
 
-O serviço `django` do compose local roda as migrações e inicia `python manage.py runserver 0.0.0.0:8000`.
-Depois de subir, acesse `http://localhost:8000/`.
+The local `django` service runs migrations and starts `python manage.py runserver 0.0.0.0:8000`.
+After startup, open `http://localhost:8000/`.
 
-O deploy de produção não copia o código da aplicação para a VPS. A pipeline publica a imagem no GHCR, copia
-`docker-compose.prod.yml` para a VPS como `docker-compose.yml`, copia `scripts/deploy-app.sh` como `deploy-app.sh`,
-e executa o script remoto para atualizar o stack.
+Production deploys do not copy the application source code to the VPS. The pipeline publishes the image to GHCR,
+copies `docker-compose.prod.yml` to the VPS as `docker-compose.yml`, copies `scripts/deploy-app.sh` as `deploy-app.sh`,
+and runs the remote script to update the stack.
 
-### Repository variables and secrets
+## Repository Variables And Secrets
 
-- Repository variables (set in GitHub Settings → Variables):
-  - `VPS_HOST`: IP ou domínio da VPS
-  - `VPS_USER`: nome do usuário de deploy (ex: `deployer`)
-  - `VPS_APP_DIR`: diretório da aplicação (ex: `/app`)
+Repository variables, configured in GitHub Settings -> Variables:
 
-- Secrets (set in GitHub Settings → Secrets):
-  - `VPS_SSH_KEY`: chave privada SSH do usuário (keep secret)
-  - `VPS_KNOWN_HOSTS`: contents of your VPS known_hosts (see README for how to generate)
+- `VPS_HOST`: VPS IP address or domain.
+- `VPS_USER`: deployment user, for example `deployer`.
+- `VPS_APP_DIR`: application directory on the VPS, for example `/app`.
 
-### Setup da VPS
+Secrets, configured in GitHub Settings -> Secrets:
 
-1. **Criar usuário de deploy e gerar SSH key**:
+- `VPS_SSH_KEY`: private SSH key for the deploy user.
+- `VPS_KNOWN_HOSTS`: contents of the VPS `known_hosts` entry.
+
+## VPS Setup
+
+1. Create the deployment user and SSH key:
+
    ```bash
    sudo useradd -m -s /bin/bash -c "Portfolio app deployment" deployer
    sudo usermod -aG docker deployer
@@ -67,37 +69,40 @@ e executa o script remoto para atualizar o stack.
    sudo -u deployer ssh-keygen -t ed25519 -f /home/deployer/.ssh/id_ed25519 -N ""
    ```
 
-2. **Criar rede Docker compartilhada**:
+2. Create the shared Docker network:
+
    ```bash
    docker network create proxy_network
    ```
 
-3. **Criar volumes compartilhados com nginx-proxy**:
+3. Create the shared volumes used by `nginx-proxy`:
+
    ```bash
    docker volume create portfolio_app_static_data
    docker volume create portfolio_app_media_data
    ```
 
-4. **Criar `.env` na VPS**:
+4. Create `.env` on the VPS:
+
    ```bash
-   # Criar .env em /app com as variáveis necessárias (baseado em .env.example)
+   # Create /app/.env with the required variables, using .env.example as reference.
    ```
 
-5. **Fazer deploy inicial manual, se necessário**:
+5. Run an initial manual deploy, if needed:
+
    ```bash
    cd /app
-   # A pipeline cria/atualiza docker-compose.yml, deploy-app.sh e .env.cicd.
-   # Após esses arquivos existirem na VPS:
+   # The pipeline creates or updates docker-compose.yml, deploy-app.sh, and .env.cicd.
+   # After those files exist on the VPS:
    ./deploy-app.sh
    ```
 
-### Observações
+## Notes
 
-- O deploy assume que a VPS já tem o `docker compose` instalado e funcionando.
-- Para simplificar, publique a imagem como **public** no GHCR; se mantiver privada, a VPS precisará autenticar no
-  registry.
-- O serviço do app no compose é esperado como `django`; não mude esse nome no `docker-compose.prod.yml`.
-- Na VPS, o arquivo de produção versionado é publicado como `docker-compose.yml`.
-- O compose da VPS compartilha os volumes `portfolio_app_static_data` e `portfolio_app_media_data` com o `nginx-proxy`.
-- O deploy roda `migrate` e `collectstatic` dentro do container do app após o `up -d`.
-- O `nginx-proxy` continua separado do app para facilitar manutenção e futuras migrações.
+- The deployment assumes Docker Compose is already installed and working on the VPS.
+- For simplicity, publish the GHCR image as public. If the image is private, the VPS must authenticate with GHCR.
+- The application service is expected to be named `django`; do not rename it in `docker-compose.prod.yml`.
+- On the VPS, the versioned production Compose file is published as `docker-compose.yml`.
+- The VPS Compose stack shares `portfolio_app_static_data` and `portfolio_app_media_data` with `nginx-proxy`.
+- The deploy script runs `migrate`, `compilemessages`, and `collectstatic` inside the app container after `up -d`.
+- `nginx-proxy` remains separate from this application stack to make maintenance and future migrations easier.
