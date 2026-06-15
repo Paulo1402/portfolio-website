@@ -89,18 +89,23 @@ jobs:
           # show known_hosts fingerprints for audit (non-fatal)
           ssh-keygen -lf ~/.ssh/known_hosts || true
 
+      - name: Upload deployment files
+        run: |
+          scp -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o StrictHostKeyChecking=yes \
+            docker-compose.prod.yml \
+            "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}:${{ vars.VPS_APP_DIR }}/docker-compose.yml"
+
+          scp -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o StrictHostKeyChecking=yes \
+            scripts/deploy-app.sh \
+            "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}:${{ vars.VPS_APP_DIR }}/deploy-app.sh"
+
       - name: Deploy on VPS (pull SHA-tagged image)
         run: |
-          # create a minimal env file on the remote that pins the image tag and owner for compose
           ssh -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o StrictHostKeyChecking=yes "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}" "bash -se" <<EOF
             set -euo pipefail
             cd "${{ vars.VPS_APP_DIR }}"
             printf 'IMAGE_TAG=%s\nGITHUB_REPOSITORY_OWNER=%s\n' "${{ github.sha }}" "${{ env.IMAGE_OWNER }}" > .env.cicd
             chmod 600 .env.cicd || true
-            # use the env-file so docker compose will substitute the IMAGE_TAG and owner into image references
-            docker compose --env-file .env.cicd pull
-            docker compose --env-file .env.cicd up -d
-            docker compose run --rm django python manage.py migrate --noinput
-            docker compose run --rm django python manage.py compilemessages
-            docker compose run --rm django python manage.py collectstatic --noinput
+            chmod +x deploy-app.sh
+            ./deploy-app.sh
           EOF
