@@ -129,10 +129,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-MESSAGE_TAGS = {
-    message_constants.ERROR: "danger",
-}
-
 ROOT_URLCONF = "portfolio_website.urls"
 
 TEMPLATES = [
