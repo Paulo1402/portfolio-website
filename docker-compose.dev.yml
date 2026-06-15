@@ -10,6 +10,8 @@ services:
     environment:
       USE_POSTGRES: "true"
     volumes:
+      - .:/app
+      - /app/.venv
       - ./staticfiles:/app/staticfiles
       - ./media:/app/media
     depends_on:

@@ -81,8 +81,10 @@ class ProjectAdmin(TranslationAdmin, TaggedModelAdminCompat):
                 str(error),
                 level=messages.ERROR,
             )
-        except Exception:
-            logger.exception("Failed to fetch GitHub data for project %s", project.id)
+        except Exception as e:
+            logger.exception(
+                f"Failed to fetch GitHub data for project {project.id}", exc_info=e
+            )
             self.message_user(
                 request,
                 "Failed to fetch GitHub data.",
