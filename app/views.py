@@ -1,11 +1,11 @@
 import logging
-import sys
 
 from django.conf import settings
 from django.contrib import messages
 from django.core.mail import EmailMessage
+from django.core.paginator import Paginator
 from django.db import DatabaseError, connection
-from django.db.models import Value
+from django.db.models import Prefetch, Value
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
@@ -13,9 +13,19 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET, require_POST
 
 from .forms import ContactForm
-from .models import Certification, Experience, Formation, Profile, Project, Skill
+from .models import (
+    Certification,
+    Experience,
+    Formation,
+    Profile,
+    Project,
+    ProjectImage,
+    Skill,
+    Topic,
+)
 
 logger = logging.getLogger(__name__)
+PROJECTS_PER_PAGE = 6
 
 
 def index(request):
@@ -81,14 +91,29 @@ def experiences(request):
 
 
 def projects(request):
-    projects = Project.objects.all().order_by("-start_date")
-
-    # TODO: implement pagination to avoid send many projects with photos to browser
+    projects = Project.objects.prefetch_related(
+        Prefetch(
+            "project_images",
+            queryset=ProjectImage.objects.all(),
+            to_attr="prefetched_images",
+        ),
+        Prefetch(
+            "topics",
+            queryset=Topic.objects.all(),
+            to_attr="prefetched_topics",
+        ),
+    ).order_by("-start_date")
+    paginator = Paginator(projects, PROJECTS_PER_PAGE)
+    page_obj = paginator.get_page(request.GET.get("page"))
 
     return render(
         request,
         "pages/projects.html",
-        {"page_title": _("Projects"), "projects": projects},
+        {
+            "page_title": _("Projects"),
+            "page_obj": page_obj,
+            "projects": page_obj.object_list,
+        },
     )
 
 
@@ -197,15 +222,20 @@ def health(request):
 
 
 def handler_404(request, *args, **kwargs):
-    # TODO: integrate log system
-    print("exception 404", args, kwargs)
+    logger.warning(
+        "404 page rendered for path %s with args=%s kwargs=%s",
+        request.path,
+        args,
+        kwargs,
+    )
     return render(request, "global/pages/404.html", status=404)
 
 
 def handler_500(request, *args, **kwargs):
-    exc_type, exc_value, exc_traceback = sys.exc_info()
-    error_message = str(exc_value)
-
-    # TODO: integrate log system
-    print("exception 500", error_message)
+    logger.exception(
+        "500 page rendered for path %s with args=%s kwargs=%s",
+        request.path,
+        args,
+        kwargs,
+    )
     return render(request, "global/pages/500.html", status=500)
