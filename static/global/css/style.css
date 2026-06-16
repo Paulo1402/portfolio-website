@@ -9,3 +9,8 @@
 body {
     overflow-y: scroll; /* Prevent layout shifts when clicking navbar links */
 }
+
+.project-image {
+    aspect-ratio: 11 / 8;
+    object-fit: cover;
+}

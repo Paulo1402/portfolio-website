@@ -4,28 +4,6 @@
 
 
 {% block main %}
-    {#    <script>#}
-    {#        // Resize all images in the carousel to the largest height#}
-    {#        document.addEventListener('DOMContentLoaded', function () {#}
-    {#            const projectImagesCarousel = document.querySelectorAll('.carousel')#}
-    {##}
-    {#            for (let i = 0; i < projectImagesCarousel.length; i++) {#}
-    {#                const projectImages = projectImagesCarousel[i].querySelectorAll('.carousel-item img')#}
-    {#                let largestHeight = 0#}
-    {##}
-    {#                projectImages.forEach(image => {#}
-    {#                    if (image.height > largestHeight) {#}
-    {#                        largestHeight = image.height#}
-    {#                    }#}
-    {#                })#}
-    {##}
-    {#                projectImages.forEach(image => {#}
-    {#                    image.style.height = `${largestHeight}px`#}
-    {#                })#}
-    {#            }#}
-    {#        })#}
-    {#    </script>#}
-
     <div class="container">
         {% for project in projects %}
             {% if not forloop.first %}
@@ -53,11 +31,12 @@
                         </div>
                     {% endif %}
 
-                    {% if project.project_images.count %}
-                        {% if project.project_images.count > 1 %}
+                    {% with project_images=project.prefetched_images %}
+                    {% if project_images %}
+                        {% if project_images|length > 1 %}
                             <div id="carousel-{{ project.id }}" class="carousel slide mt-3">
                                 <div class="carousel-indicators">
-                                    {% for project_image in project.project_images.all %}
+                                    {% for project_image in project_images %}
                                         <button type="button"
                                                 data-bs-target="#carousel-{{ project.id }}"
                                                 data-bs-slide-to="{{ forloop.counter0 }}"
@@ -66,10 +45,11 @@
                                 </div>
 
                                 <div class="carousel-inner">
-                                    {% for project_image in project.project_images.all %}
+                                    {% for project_image in project_images %}
                                         <div class="carousel-item{% if forloop.first %} active{% endif %}">
                                             <img src="{{ project_image.image.url }}"
-                                                 class="d-block w-100"
+                                                 class="d-block w-100 project-image"
+                                                 loading="lazy"
                                                  alt="{{ project.title }}{{ forloop.counter }}">
                                         </div>
                                     {% endfor %}
@@ -88,11 +68,13 @@
                                 </button>
                             </div>
                         {% else %}
-                            <img src="{{ project.project_images.first.image.url }}"
-                                 class="img-fluid mt-3"
+                            <img src="{{ project_images.0.image.url }}"
+                                 class="img-fluid mt-3 project-image"
+                                 loading="lazy"
                                  alt="{{ project.title }}">
                         {% endif %}
                     {% endif %}
+                    {% endwith %}
 
                     {% if project.github_url %}
                         <a href="{{ project.github_url }}" target="_blank" class="btn btn-primary mt-3">
@@ -102,24 +84,52 @@
                     {% endif %}
                 </div>
 
-                {% if project.topics.count %}
+                {% with topics=project.prefetched_topics %}
+                {% if topics %}
                     <div class="card-footer">
-                        {% for topic in project.topics.all %}
+                        {% for topic in topics %}
                             <span class="badge rounded-pill text-bg-success">{{ topic.name }}</span>
                         {% endfor %}
                     </div>
                 {% endif %}
+                {% endwith %}
             </div>
         {% endfor %}
 
-        {#        <nav aria-label="Projects pagination" class="mt-4">#}
-        {#            <ul class="pagination">#}
-        {#                <li class="page-item"><a class="page-link" href="#">Anterior</a></li>#}
-        {#                <li class="page-item"><a class="page-link" href="#">1</a></li>#}
-        {#                <li class="page-item"><a class="page-link" href="#">2</a></li>#}
-        {#                <li class="page-item"><a class="page-link" href="#">3</a></li>#}
-        {#                <li class="page-item"><a class="page-link" href="#">Próxima</a></li>#}
-        {#            </ul>#}
-        {#        </nav>#}
+        {% if page_obj.has_other_pages %}
+            <nav aria-label="{% translate "Projects pagination" %}" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item{% if not page_obj.has_previous %} disabled{% endif %}">
+                        {% if page_obj.has_previous %}
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                {% translate "Previous" %}
+                            </a>
+                        {% else %}
+                            <span class="page-link">{% translate "Previous" %}</span>
+                        {% endif %}
+                    </li>
+
+                    {% for page_number in page_obj.paginator.page_range %}
+                        <li class="page-item{% if page_obj.number == page_number %} active{% endif %}">
+                            {% if page_obj.number == page_number %}
+                                <span class="page-link">{{ page_number }}</span>
+                            {% else %}
+                                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+
+                    <li class="page-item{% if not page_obj.has_next %} disabled{% endif %}">
+                        {% if page_obj.has_next %}
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                {% translate "Next" %}
+                            </a>
+                        {% else %}
+                            <span class="page-link">{% translate "Next" %}</span>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
     </div>
 {% endblock %}
