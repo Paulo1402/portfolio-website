@@ -2,8 +2,8 @@ import tagulous.admin
 from modeltranslation.admin import TranslationAdmin
 
 from app.admin.mixins import TaggedModelAdminCompat
-from app.models import Certification
 from app.forms.base import BaseStartDateEndDateForm
+from app.models import Certification
 
 
 class CertificationAdminForm(BaseStartDateEndDateForm):

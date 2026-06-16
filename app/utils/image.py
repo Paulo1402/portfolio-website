@@ -1,9 +1,9 @@
 import io
 
-from PIL.Image import Image
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from PIL import ImageOps
 from django.db.models.fields.files import ImageFieldFile
+from PIL import ImageOps
+from PIL.Image import Image
 
 
 def resize_and_pad_image(image: Image, target_width=1100, target_height=800) -> Image:

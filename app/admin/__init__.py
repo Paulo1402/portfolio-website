@@ -1,12 +1,11 @@
+from .certification import CertificationAdmin
+from .experience import ExperienceAdmin
+from .formation import FormationAdmin
+from .profile import ProfileAdmin
 from .project import ProjectAdmin
 from .skill import SkillAdmin
 from .skill_area import SkillAreaAdmin
 from .topic import TopicAdmin
-from .certification import CertificationAdmin
-from .profile import ProfileAdmin
-from .formation import FormationAdmin
-from .experience import ExperienceAdmin
-
 
 __all__ = [
     "SkillAdmin",

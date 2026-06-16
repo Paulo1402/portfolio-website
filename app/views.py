@@ -1,20 +1,19 @@
-import sys
 import logging
+import sys
 
 from django.conf import settings
+from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.db import DatabaseError, connection
 from django.db.models import Value
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.views.decorators.http import require_GET, require_POST
+from django.shortcuts import redirect, render
 from django.utils.translation import gettext as _
+from django.views.decorators.http import require_GET, require_POST
 
 from .forms import ContactForm
-from .models import Profile, Skill, Experience, Project, Formation, Certification
-
+from .models import Certification, Experience, Formation, Profile, Project, Skill
 
 logger = logging.getLogger(__name__)
 

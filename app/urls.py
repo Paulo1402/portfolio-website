@@ -1,9 +1,8 @@
 import tagulous.views
 from django.urls import path
 
-from .models import Topic
 from . import views
-
+from .models import Topic
 
 # app_name = "portfolio"
 
