@@ -22,29 +22,48 @@ def convert_image_to_inmemoryfile(
     image: Image, name: str, image_format: str
 ) -> InMemoryUploadedFile:
     output = io.BytesIO()
+    pillow_format = get_pillow_image_format(image_format)
+    content_type = get_image_content_type(image_format)
 
-    image.save(output, format=image_format)
+    image.save(output, format=pillow_format)
     output.seek(0)
 
     return InMemoryUploadedFile(
         output,
         "ImageField",
         name,
-        f"image/{image_format}",
+        content_type,
         output.getbuffer().nbytes,
         None,
     )
 
 
+def get_image_content_type(image_format: str) -> str:
+    normalized_format = get_pillow_image_format(image_format).lower()
+
+    return f"image/{normalized_format}"
+
+
+def get_pillow_image_format(image_format: str) -> str:
+    normalized_format = image_format.upper()
+
+    if normalized_format == "JPG":
+        return "JPEG"
+
+    return normalized_format
+
+
 def get_max_image_dimensions(
     images: list[Image | ImageFieldFile],
 ) -> tuple[int, int]:
+    if not images:
+        raise ValueError("At least one image is required to get maximum dimensions.")
+
     width = 0
     height = 0
 
     for image in images:
-        if image.width > width and image.height > height:
-            width = image.width
-            height = image.height
+        width = max(width, image.width)
+        height = max(height, image.height)
 
     return width, height
