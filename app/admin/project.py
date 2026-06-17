@@ -110,6 +110,9 @@ class ProjectAdmin(TranslationAdmin, TaggedModelAdminCompat):
 
     @staticmethod
     def resize_and_pad_images(product_images: list[ProjectImage]):
+        if not product_images:
+            return
+
         width, height = get_max_image_dimensions(
             [product_image.image for product_image in product_images]
         )
