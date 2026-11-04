@@ -102,6 +102,10 @@ jobs:
             scripts/deploy-app.sh \
             "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}:${{ vars.VPS_APP_DIR }}/deploy-app.sh"
 
+          scp -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o StrictHostKeyChecking=yes \
+            scripts/backup-db.sh \
+            "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}:${{ vars.VPS_APP_DIR }}/backup-db.sh"
+
       - name: Deploy on VPS (pull SHA-tagged image)
         run: |
           ssh -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o StrictHostKeyChecking=yes "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}" "bash -se" <<EOF
