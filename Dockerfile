@@ -28,6 +28,7 @@ RUN uv sync --frozen --no-install-project --no-dev
 # Installing separately from its dependencies allows optimal layer caching
 ADD . /app
 RUN uv sync --frozen --no-dev
+RUN uv run python manage.py compilemessages
 
 # Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"

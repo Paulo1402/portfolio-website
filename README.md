@@ -40,6 +40,12 @@ docker compose -f docker-compose.dev.yml up -d --build
 The local `django` service runs migrations and starts `python manage.py runserver 0.0.0.0:8000`.
 After startup, open `http://localhost:8000/`.
 
+After editing translation files, compile the runtime catalogs before checking translated pages locally:
+
+```bash
+uv run python manage.py compilemessages --locale pt_BR --locale en
+```
+
 Production deploys do not copy the application source code to the VPS. The pipeline publishes the image to GHCR,
 copies `docker-compose.prod.yml` to the VPS as `docker-compose.yml`, copies `scripts/deploy-app.sh` as `deploy-app.sh`,
 and runs the remote script to update the stack.
